@@ -1,0 +1,15 @@
+lib/Autocache.pm
+lib/Autocache/Record.pm
+lib/Autocache/Strategy.pm
+lib/Autocache/Config.pm
+lib/Autocache/WorkQueue.pm
+lib/Autocache/Strategy/Refresh.pm
+lib/Autocache/Strategy/Simple.pm
+lib/Autocache/Store/UnboundedMemory.pm
+lib/Autocache/Store/Memcached.pm
+lib/Autocache/Store/Null.pm
+lib/Autocache/Store/BoundedMemoryLRU.pm
+lib/Autocache/Config/Node.pm
+lib/Autocache/Store.pm
+Build.PL
+MANIFEST
