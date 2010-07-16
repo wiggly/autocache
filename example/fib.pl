@@ -1,4 +1,4 @@
-#!/usr/bin/perl -I /www/gumtree/cgi-bin
+#!/usr/bin/env perl
 
 use strict;
 use warnings;

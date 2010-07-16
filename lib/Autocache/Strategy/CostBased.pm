@@ -1,12 +1,14 @@
-package Autocache::Strategy::Refresh;
+package Autocache::Strategy::CostBased;
 
 use Any::Moose;
 
 extends 'Autocache::Strategy';
 
+#use Carp;
+use Carp qw( cluck );
 use Autocache;
-use Carp;
 use Log::Log4perl qw( get_logger );
+#use Functions::Log qw( get_logger );
 use Scalar::Util qw( weaken );
 
 #
@@ -35,7 +37,7 @@ has 'base_strategy' => (
 
 #
 # work_queue : object that provides a work_queue interface to push refresh
-# jobs on to
+# jobs on to [default: Cacher::get_work_queue ]
 #
 has 'work_queue' => (
     is => 'ro',
@@ -47,8 +49,10 @@ sub get_cache_record
 {
     my ($self,$name,$normaliser,$coderef,$args,$return_type) = @_;
     get_logger()->debug( "get_cache_record" );
+#    my $key = $self->_generate_cache_key( $name, $normaliser, $args, $return_type );
     my $rec = $self->base_strategy->get_cache_record(
         $name, $normaliser, $coderef, $args, $return_type );    
+
     
     get_logger()->debug( "record age  : " . $rec->age );
     get_logger()->debug( "refresh age : " . $self->refresh_age );
@@ -63,6 +67,18 @@ sub get_cache_record
                 $name, $normaliser, $coderef, $args, $return_type, $rec ) );
     }
 
+    unless( $rec )
+    {
+        $self->_miss;
+        $rec = $self->_create_cache_record(
+            $name, $normaliser, $coderef, $args, $return_type );
+        $self->set_cache_record( $rec->key, $rec );
+    }
+    else
+    {
+        $self->_hit;
+    }
+    
     return $rec;    
 }
 
@@ -73,11 +89,17 @@ sub set_cache_record
     return $self->base_strategy->set_cache_record( $rec );    
 }
 
+
 sub _refresh_task
 {
     my ($self,$name,$normaliser,$coderef,$args,$return_type,$rec) = @_;
 
     get_logger()->debug( "_refresh_task " . $name );
+
+    #
+    # TODO - add code to update cache entry to stop cache-stampeding if the
+    # underlying store is distributed/shared
+    #
 
     weaken $self;
         
@@ -100,6 +122,15 @@ sub _build_work_queue
     return Autocache->singleton->get_work_queue();
 }
 
+#sub BUILD
+#{
+#    my ($self) = @_;    
+#    use Data::Dumper;
+#    print STDERR __PACKAGE__ . "::BUILD\n";
+#    print STDERR "store: " . Dumper( \@_ ) . "\n";
+#    cluck "building\n";
+#}
+
 around BUILDARGS => sub
 {
     my $orig = shift;
@@ -111,19 +142,17 @@ around BUILDARGS => sub
     {
         my $config = $_[0];
         my %args;
-        my $node;
+        my $base_strategy_name = $config->get_node( 'base_strategy' )->value;
 
-        if( $node = $config->get_node( 'base_strategy' ) )
-        {
-            get_logger()->debug( "base strategy node found" );
-            $args{base_strategy} = Autocache->singleton->get_strategy( $node->value );
-        }
-        
-        if( $node = $config->get_node( 'refresh_age' ) )
-        {
-            get_logger()->debug( "refresh age node found" );
-            $args{refresh_age} = $node->value;
-        }
+        get_logger()->debug( "base strategy : $base_strategy_name" );        
+
+        $args{base_strategy} = Autocache->singleton->get_strategy( $base_strategy_name );
+
+        $args{refresh_age} = 2;
+
+#        print STDERR __PACKAGE__ . "::BUILDARGS\n";
+#        print STDERR Dumper( \%args );
+#        cluck "building args\n";
 
         return $class->$orig( %args );
     }
@@ -132,6 +161,7 @@ around BUILDARGS => sub
         return $class->$orig(@_);
     }
 };
+
 
 no Any::Moose;
 __PACKAGE__->meta->make_immutable;

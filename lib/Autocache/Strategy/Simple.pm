@@ -4,29 +4,21 @@ use Any::Moose;
 
 extends 'Autocache::Strategy';
 
-use Log::Log4perl qw( get_logger );
-#use Functions::Log qw( get_logger );
-use Data::Dumper;
 use Carp qw( cluck );
+use Log::Log4perl qw( get_logger );
 
 has 'store' => (
     is => 'ro',
-    isa => 'Autocache::Store', );
+    isa => 'Autocache::Store',
+    lazy_build => 1,
+);
 
 sub get_cache_record
 {
     my ($self,$name,$normaliser,$coderef,$args,$return_type) = @_;
     get_logger()->debug( "get_cache_record $name" );
 
-#    print STDERR "get cache record\n";
-#    print STDERR Dumper( $self );
-
     my $key = $self->_generate_cache_key( $name, $normaliser, $args, $return_type );
-
-#    get_logger()->debug( "key $key" );
-
-#    print STDERR "store ", Dumper( $self->store );
-
 
     my $rec = $self->store->get( $key );
     unless( $rec )
@@ -46,18 +38,14 @@ sub get_cache_record
 sub set_cache_record
 {
     my ($self,$rec) = @_;
-    get_logger()->debug( "set_cache_record $rec->name" );
+    get_logger()->debug( "set_cache_record " . $rec->name );
     return $self->store->set( $rec->key, $rec );    
 }
 
-#sub BUILD
-#{
-#    my ($self) = @_;
-#    
-#    print STDERR __PACKAGE__ . "::BUILD\n";
-#    print STDERR "store: " . Dumper( $self->store ) . "\n";
-#    cluck "building\n";
-#}
+sub _build_store
+{
+    return Autocache->singleton->get_default_store();
+}
 
 around BUILDARGS => sub
 {
@@ -70,15 +58,14 @@ around BUILDARGS => sub
     {
         my $config = $_[0];
         my %args;
-        my $store_name = $config->get_node( 'store' )->value;
-
-        get_logger()->debug( "store name : $store_name" );        
-
-        $args{store} = Autocache->singleton->get_store( $store_name );
-
-#        print STDERR __PACKAGE__ . "::BUILDARGS\n";
-#        print STDERR Dumper( \%args );
-#        cluck "building args\n";
+        my $node;
+        
+        if( $config->node_exists( 'store' ) )
+        {
+            $node = $config->get_node( 'store' );     
+            get_logger()->debug( "found store node in config '" . $node->value . "'" );
+            $args{store} = Autocache->singleton->get_store( $node->value );
+        }
 
         return $class->$orig( %args );
     }

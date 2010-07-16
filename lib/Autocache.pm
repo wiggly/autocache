@@ -378,3 +378,92 @@ sub _dump_stats
 }
 
 1;
+
+__END__
+
+=pod
+
+=head1 NAME
+
+Autocache - An automatic caching framework for Perl.
+
+=head1 SYNOPSIS
+
+    use Autocache;
+
+    autocache 'my_slow_function';
+
+    sub my_slow_function
+    {
+        ...
+    }
+
+=head1 DESCRIPTION
+
+This code came about as the result of attempting to refactor, simplify and
+extend the caching used on a rather large website.
+
+It provides a framework for configuring multiple caches at different levels,
+process, server, networked and allows you to declaratively configuring which
+functions have their results cached, and how.
+
+Autocache acts a lot like the Memoize module. You tell it what function you
+would like to have cached and if you say nothing else it will go ahead and
+cache all calls to that function in-process, you just specify the name of
+the function.
+
+In addition to this though Autocache allows you to specify in great detail
+how and where function results get cached.
+
+The module uses IoC/dependency injection from a configuration file to setup
+a number of Stores and Strategies. These are the basic building blocks used
+to determine how things get cached.
+
+Strategies determine how a cached value should be validated, refreshed, and
+even whether or not the value should be stored at all.
+
+Stores provide the actual storage for values and also specify how values get
+evicted from stores, if at all.
+
+The goal here is to make it stupidly simple to start to cache certain
+functions, and change where and how those values get cached if you find
+they're in the wrong place.
+
+=head1 CONCEPTS
+
+Autocache splits up the process of caching into generating the values and
+storing the values.
+
+Values are generated using Strategies, which may be chained. Some examples
+of Strategies are Simple, Refresh and CostBased.
+
+Values are stored using Stores. Some examples of Stores are UnboundedMemory,
+BoundedMemoryLRU and Memcached.
+
+=head1 TODO
+
+Test, test, test.
+
+=head1 BUGS
+
+Loads, and adding more all the time. This code is yet to become stable.
+
+=head1 LICENSE
+
+This module is Copyright (c) 2010 Nigel Rantor. England. All rights
+reserved.
+
+You may distribute under the terms of either the GNU General Public License
+or the Artistic License, as specified in the Perl README file.
+
+=head1 SUPPORT / WARRANTY
+
+This module is free software. IT COMES WITHOUT WARRANTY OF ANY KIND.
+
+=head1 AUTHORS
+
+Nigel A Rantor - E<lt>wiggly@wiggly.orgE<gt>
+
+Rajit B Singh - E<lt>rajit.b.singh@gmail.comE<gt>
+
+=cut

@@ -1,4 +1,4 @@
-#!/usr/bin/perl -I /www/gumtree/cgi-bin
+#!/usr/bin/env perl
 
 use strict;
 use warnings;
@@ -14,15 +14,17 @@ Autocache->initialise( filename => './refresher.conf' );
 
 autocache 'cached_time';
 
-# If you're trying this with the above line commented out then you'll be
-# waiting for...some time...
+my $finish = time + 30;
 
-while( 1 )
+do
 {
-    printf "cached time: %d\n", cached_time();
+    printf "finish time: %d - cached time: %d\n",
+        $finish,
+        cached_time();
     Autocache->singleton->run_work_queue;
     sleep 1;
 }
+while( $finish > cached_time() );
 
 exit;
 

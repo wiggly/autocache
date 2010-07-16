@@ -5,7 +5,7 @@ use Module::Build;
 my $builder = Module::Build->new(
     module_name => 'Autocache',
     license => 'perl',
-    dist_author => 'Nigel Rantor <wiggly@wiggly.org>',
+    dist_author => [ 'Nigel A Rantor <wiggly@wiggly.org>', 'Rajit B Singh <rajit.b.singh@gmail.com>' ],
     dist_version_from => 'lib/Autocache.pm',
     requires => {
         'Any::Moose' => 0,
