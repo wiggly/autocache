@@ -11,6 +11,8 @@ has '_stats' => (
 
 sub get_cache_record {}
 
+sub set_cache_record {}
+
 sub get_statistics
 {
     my ($self) = @_;

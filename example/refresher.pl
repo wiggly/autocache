@@ -2,25 +2,31 @@
 
 use strict;
 use warnings;
+use Log::Log4perl qw( :easy );
+
+Log::Log4perl->easy_init( $INFO );
+
+use lib '../lib';
+
 use Autocache qw( autocache );
 
-Autocache->initialise( filename => './fib.conf' );
+Autocache->initialise( filename => './refresher.conf' );
 
-autocache 'fib';
+autocache 'cached_time';
 
 # If you're trying this with the above line commented out then you'll be
 # waiting for...some time...
 
-foreach my $i ( 1..100 )
+while( 1 )
 {
-    print "fib $i : " . fib( $i ) . "\n";
+    printf "cached time: %d\n", cached_time();
+    Autocache->singleton->run_work_queue;
+    sleep 1;
 }
 
 exit;
 
-sub fib
+sub cached_time
 {
-    my ($n) = @_;    
-    return 1 if( $n == 1 || $n == 2 );
-    return ( fib( $n - 1 ) + fib( $n - 2 ) );
+    time;
 }

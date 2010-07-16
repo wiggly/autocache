@@ -43,6 +43,13 @@ sub get_cache_record
     return $rec;
 }
 
+sub set_cache_record
+{
+    my ($self,$rec) = @_;
+    get_logger()->debug( "set_cache_record $rec->name" );
+    return $self->store->set( $rec->key, $rec );    
+}
+
 #sub BUILD
 #{
 #    my ($self) = @_;
