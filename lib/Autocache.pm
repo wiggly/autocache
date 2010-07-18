@@ -429,7 +429,161 @@ The goal here is to make it stupidly simple to start to cache certain
 functions, and change where and how those values get cached if you find
 they're in the wrong place.
 
-=head1 CONCEPTS
+=head1 CONSIDERATIONS
+
+There are a number of considerations when using autocache, or any caching
+mechanism.
+
+=head2 PURITY
+
+Any function that is pure should have no trouble being cached.
+
+A pure function being one;
+
+=over
+
+=item
+
+whose value depends soley on the parameters passed to the function and no other global information, state or input from IO or external devices. 
+
+=item
+
+generates no side-effects (although, depending on your use, side-effects may be allowable).
+
+=back
+
+If your function does depend on external state then you may or may not be
+able to use some form of caching. For example if your function depends on
+one of a number of states that may be the current one then you can always
+create a new function that does depend on all of that information and make
+the current function simply a driver for it.
+
+For example, the function below depends on the state of a global variable C<$mode>.
+
+    autocache 'authorised';
+
+    sub authorised
+    {
+        my ($user,$resource,$action) = @_;
+        if( $mode eq 'normal' )
+        {
+            ...normal mode code...
+        }
+        elsif( $mode eq 'strict' )
+        {
+            ...strict mode code...
+        }
+        else
+        {
+            ...all other mode code...
+        }
+    }
+
+If this function is cached then autocache will cache the value generated for
+whatever the C<$mode> variable is set to at the time of the first
+invocation, if this function is invoked again later on it may produce
+incorrect results since the value of C<$mode> has changed.
+
+We can still gain a speedup through caching but we have to rewrite it
+slightly to make sure we're caching a pure function.
+
+    autocache '_authorised_by_mode';
+
+    sub authorised
+    {
+        my ($user,$resource,$action) = @_;
+        return _authorised_by_mode($user,$resource,$action,$mode);
+    }
+
+    sub _authorised_by_mode
+    {
+        my ($user,$resource,$action,$mode) = @_;
+        if( $mode eq 'normal' )
+        {
+            ...normal mode code...
+        }
+        elsif( $mode eq 'strict' )
+        {
+            ...strict mode code...
+        }
+        else
+        {
+            ...all other mode code...
+        }
+    }
+
+Now even though the C<authorised> function is still dependant upon the
+global C<$mode> variable the new C<_authorised_by_mode> function is entirely
+dependant upon it's input parameters and nothing more and it can be cached.
+
+=head2 NORMALISATION
+
+Function results are cached based on the arguments to the function. For
+functions whose arguments are position dependant and are simple values
+autocache should simply do the right thing.
+
+Two cases where autocache will require help are when the arguments to a
+function are provided through a hash, or more complex data structure and when
+objects/references are passed around that are equivalent but where the
+identities of the references are not.
+
+For example, if a function 'fn' accepts a hash containing one or more
+parameters named 'a', 'b', 'c' and 'd' then the following calls are
+equivalent but autocache can't tell that.
+
+    fn( 'a', 3, 'd', 4 );
+    
+    fn( 'd', 4, 'a', 3 )
+
+To overcome this you can provide a normalisation function that takes the
+parameters that are passed to the function and provides a canonical string
+version that ensures equivalent calls appear to be the same to autocache.
+Obviously care should be taken when designing a normalisation function where
+the inputs may be large. (TODO - cookbook for normalisation)
+
+To allow autocache to automatically pick up your normalisation function it
+should be named the same as the function it provides normalisation for but
+prefixed with '_normalise_'.
+
+For the above function we could use something like this;
+
+    sub _normalise_fn
+    {
+        my (%hash) = @_;
+        return join ':', map { "$_=$hash{$_}" } sort keys %hash;
+    }
+
+
+
+=head1 CONTEXT
+
+Perl functions are called in one of three contexts.
+
+=over
+
+=item
+
+scalar
+
+=item
+
+list
+
+=item
+
+void
+
+=back
+
+Autocache automatically maintains seperate caches for each of the first two
+contexts that functions may be called in. Since it expects functions to be
+pure it understands when a function is called in void context and does
+nothing at all since the value will not be used.
+
+TODO - add option to merge all contexts into one if the author knows that
+the same value is returned in either scalr or list context.
+
+=head1 ARCHITECTURE
 
 Autocache splits up the process of caching into generating the values and
 storing the values.
@@ -439,6 +593,12 @@ of Strategies are Simple, Refresh and CostBased.
 
 Values are stored using Stores. Some examples of Stores are UnboundedMemory,
 BoundedMemoryLRU and Memcached.
+
+The API for both Strategies and Stores is not yet completely fixed but you
+should be able to quite easily take one of those that already exists and
+modify it to suit your needs. The configuration syntax allows you to use any
+custom classes you like as long as they can accept the way we perform IoC
+(sub-optimal right now).
 
 =head1 TODO
 
