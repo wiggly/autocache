@@ -2,11 +2,10 @@
 
 use strict;
 use warnings;
-use Log::Log4perl qw( :easy );
-Log::Log4perl->easy_init( $FATAL );
 
 use Test::More tests => 3;
-
+use Log::Log4perl;
+Log::Log4perl::init( 't/log.conf' );
 use Autocache qw( autocache );
 
 ok( autocache 'contextual', 'Autocache function' );

@@ -3,11 +3,9 @@
 use strict;
 use warnings;
 
-use Log::Log4perl qw( :easy );
-Log::Log4perl->easy_init( $FATAL );
-
 use Test::More tests => 2;
-
+use Log::Log4perl;
+Log::Log4perl::init( 't/log.conf' );
 use Autocache qw( autocache );
 
 Autocache->initialise( filename => 't/001_fib.t.conf' );
