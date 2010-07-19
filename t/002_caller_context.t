@@ -10,7 +10,7 @@ use Autocache qw( autocache );
 
 ok( autocache 'contextual', 'Autocache function' );
 
-is( contextual(), 'c', 'Scalar context' );
+is( scalar( contextual() ), 'c', 'Scalar context' );
 
 is_deeply( [ contextual() ], [ qw( a b ) ], 'List context' );
 
