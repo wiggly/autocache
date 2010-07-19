@@ -12,7 +12,16 @@ sub get {}
 #
 # set KEY RECORD
 #
-sub set {}
+sub set
+{
+    my ($self,$key,$rec) = @_;
+    get_logger()->debug( "set: $key" );
+    unless( $rec->cached )
+    {
+        $rec->{cached} = 1;
+    }
+    return 1;
+}
 
 #
 # delete KEY

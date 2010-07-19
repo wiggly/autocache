@@ -4,7 +4,6 @@ use strict;
 use warnings;
 
 use Log::Log4perl qw( get_logger );
-#use Functions::Log qw( get_logger );
 
 our $AUTOLOAD;
 
@@ -16,6 +15,8 @@ sub new
         unless defined $args{name};
     $args{create_time} = $now
         unless defined $args{create_time};
+    $args{cached} = 0
+        unless exists $args{cached};
     my $self = { %args };
     return bless $self, $class;
 }

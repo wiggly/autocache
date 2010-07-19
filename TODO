@@ -21,4 +21,5 @@
 
 - honour function stratgey parameter in code
 
-
+- refactor strategy API to completely seperate record creation from
+  retreival/setting

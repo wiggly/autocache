@@ -32,6 +32,7 @@ sub get
 sub set
 {
     my ($self,$key,$rec) = @_;
+    $self->SUPER::set( $key, $rec );
     get_logger()->debug( "set: $key" );
     $self->_memcached->set( $key, $rec, 0 ); 
 }

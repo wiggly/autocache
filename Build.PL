@@ -10,6 +10,7 @@ my $builder = Module::Build->new(
     requires => {
         'Any::Moose' => 0,
         'Test::More' => 0,
+	'Time::HiRes' => 0,
     },
 );
 
