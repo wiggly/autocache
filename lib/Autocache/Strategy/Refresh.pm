@@ -43,6 +43,14 @@ has 'work_queue' => (
     lazy_build => 1,
 );
 
+sub create_cache_record
+{
+    my ($self,$name,$normaliser,$coderef,$args,$return_type) = @_;
+    get_logger()->debug( "create_cache_record" );
+    return $self->base_strategy->create_cache_record(
+        $name,$normaliser,$coderef,$args,$return_type);
+}
+
 sub get_cache_record
 {
     my ($self,$name,$normaliser,$coderef,$args,$return_type) = @_;
@@ -50,14 +58,15 @@ sub get_cache_record
     my $rec = $self->base_strategy->get_cache_record(
         $name, $normaliser, $coderef, $args, $return_type );    
     
-    get_logger()->debug( "record age  : " . $rec->age );
-    get_logger()->debug( "refresh age : " . $self->refresh_age );
 
     #
     # TODO - add min refresh time to stop cache stampede for shared caches
     #
     if( $rec and ( $rec->age > $self->refresh_age ) )
     {
+        get_logger()->debug( "record age  : " . $rec->age );
+        get_logger()->debug( "refresh age : " . $self->refresh_age );
+
         $self->work_queue->push(
             $self->_refresh_task(
                 $name, $normaliser, $coderef, $args, $return_type, $rec ) );
@@ -84,7 +93,7 @@ sub _refresh_task
     return sub
     {
         get_logger()->debug( "refreshing record: " . $rec->to_string );
-        my $fresh_rec = $self->_create_cache_record(
+        my $fresh_rec = $self->create_cache_record(
             $name, $normaliser, $coderef, $args, $return_type );
         $self->set_cache_record( $fresh_rec );
     };

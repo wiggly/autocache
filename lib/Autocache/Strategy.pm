@@ -9,9 +9,9 @@ has '_stats' => (
     is => 'rw',
     default => sub { { total => 0, hit => 0, miss => 0 } }, );
 
-sub get_cache_record {}
+sub get_cache_record { return undef; }
 
-sub set_cache_record {}
+sub set_cache_record { return undef; }
 
 sub get_statistics
 {
@@ -22,10 +22,13 @@ sub get_statistics
 #
 # create a cache record by invoking the function to be cached
 #
-sub _create_cache_record
+# this generates a basic cache record, strategies built on top of this
+# should feel free to add their own data elements to the cache record
+#
+sub create_cache_record
 {
     my ($self,$name,$normaliser,$coderef,$args,$return_type) = @_;
-    get_logger()->debug( "_create_cache_record" );
+    get_logger()->debug( "create_cache_record" );
     my $value;
 
     if( $return_type eq 'S' )
