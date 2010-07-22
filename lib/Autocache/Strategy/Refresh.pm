@@ -18,7 +18,7 @@ use Scalar::Util qw( weaken );
 # background by a work queue
 #
 has 'refresh_age' => (
-    is => 'ro',
+    is => 'rw',
     isa => 'Int',
     default => 60,
 );
