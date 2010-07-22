@@ -25,7 +25,6 @@ sub get_cache_record
     {
         $self->_miss;
         $rec = $self->_create_cache_record( $name, $normaliser, $coderef, $args, $return_type );
-		$self->set_cache_record($rec);
     }
     else
     {
