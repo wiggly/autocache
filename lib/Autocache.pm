@@ -294,8 +294,18 @@ sub _generate_cached_fn
         get_logger()->debug( "return type: $return_type" );
 
         my $strategy = $self->get_strategy_for_fn( $name );
-        my $value = $strategy->get_cache_record(
-            $name, $normaliser, $coderef, \@_, $return_type )->value;
+
+        my $rec = $strategy->get_cache_record(
+            $name, $normaliser, $coderef, \@_, $return_type );
+
+        unless( $rec )
+        {
+            $rec = $strategy->create_cache_record(
+                $name, $normaliser, $coderef, \@_, $return_type );
+            $strategy->set_cache_record( $rec );
+        }
+
+        my $value = $rec->value;
 
         return wantarray ? @$value : $value;
     };
