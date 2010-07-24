@@ -8,7 +8,7 @@ use Log::Log4perl;
 Log::Log4perl::init( 't/log.conf' );
 use Autocache qw( autocache );
 
-Autocache->initialise( filename => 't/004_stats.t.conf' );
+Autocache->initialise( filename => 't/004_stat.t.conf' );
 
 ok( autocache 'fib', 'Autocache function' );
 
