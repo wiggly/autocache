@@ -414,7 +414,7 @@ This code came about as the result of attempting to refactor, simplify and
 extend the caching used on a rather large website.
 
 It provides a framework for configuring multiple caches at different levels,
-process, server, networked and allows you to declaratively configuring which
+process, server, networked and allows you to declaratively configure which
 functions have their results cached, and how.
 
 Autocache acts a lot like the Memoize module. You tell it what function you

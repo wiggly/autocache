@@ -3,7 +3,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 2;
+use Test::More tests => 5;
 use Log::Log4perl;
 Log::Log4perl::init( 't/log.conf' );
 use Autocache qw( autocache );
@@ -13,6 +13,19 @@ Autocache->initialise( filename => 't/003_refresh.t.conf' );
 ok( autocache 'cached_time', 'Autocache function' );
 
 ok( test_refresh(), 'Test refresh' );
+
+Autocache->singleton->get_default_strategy
+	->refresh_age(5);
+
+my $cached_time = cached_time();
+Autocache->singleton->run_work_queue;
+sleep 2;
+is($cached_time, cached_time(), 'cached_time() returns the cached result on subsequent calls before refresh_age is exceeded');
+Autocache->singleton->run_work_queue;
+sleep 4;
+is($cached_time, cached_time(), 'cached_time() returns the cached result on subsequent calls before refresh_age is exceeded');
+Autocache->singleton->run_work_queue;
+isnt($cached_time, cached_time(), 'cached_time() returns a refreshed result on subsequent calls after refresh_age is exceeded');
 
 exit;
 
