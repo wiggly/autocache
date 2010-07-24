@@ -49,6 +49,7 @@ sub to_string
 sub AUTOLOAD
 {
     my ($self) = @_;
+    return if $AUTOLOAD =~ /::DESTROY$/;
     get_logger()->debug( "AUTOLOAD $AUTOLOAD" );
     if( $AUTOLOAD =~ m/^.*::(\w+?)$/ )
     {
