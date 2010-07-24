@@ -24,11 +24,6 @@ sub delete {}
 #
 sub clear {}
 
-#
-# statistics
-#
-sub statistics {}
-
 no Any::Moose;
 __PACKAGE__->meta->make_immutable;
 
