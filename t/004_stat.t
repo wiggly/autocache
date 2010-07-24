@@ -3,7 +3,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 2;
+use Test::More tests => 5;
 use Log::Log4perl;
 Log::Log4perl::init( 't/log.conf' );
 use Autocache qw( autocache );
@@ -20,18 +20,11 @@ my $strategy = Autocache->singleton->get_strategy( 'stats' );
 
 my $stats = $strategy->statistics;
 
-diag( 'stats' );
-diag( sprintf 'create : %d %.2f%%',
-    $stats->{create},
-    ( $stats->{create} / $stats->{total} ) * 100 );
+is( $stats->{create}, 65, 'Create count correct' );
 
-diag( sprintf 'hit    : %d %.2f%%',
-    $stats->{hit},
-    ( $stats->{hit} / $stats->{total} ) * 100 );
+is( $stats->{hit}, 63, 'Hit count correct' );
 
-diag( sprintf 'miss   : %d %.2f%%',
-    $stats->{miss},
-    ( $stats->{miss} / $stats->{total} ) * 100 );
+is( $stats->{miss}, 65, 'Miss count correct' );
 
 exit;
 
