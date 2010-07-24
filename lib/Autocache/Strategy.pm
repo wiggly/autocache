@@ -5,19 +5,9 @@ use Any::Moose;
 use Autocache::Record;
 use Log::Log4perl qw( get_logger );
 
-has '_stats' => (
-    is => 'rw',
-    default => sub { { total => 0, hit => 0, miss => 0 } }, );
-
 sub get_cache_record { return undef; }
 
 sub set_cache_record { return undef; }
-
-sub get_statistics
-{
-    my ($self) = @_;
-    return $self->_stats;
-}
 
 #
 # create a cache record by invoking the function to be cached
@@ -60,20 +50,6 @@ sub _generate_cache_key
     get_logger()->debug( "_generate_cache_key" );
     return sprintf 'AC-%s-%s-%s',
         $return_type, $name, $normaliser->( @$args );
-}
-
-sub _hit
-{
-    my ($self) = @_;
-    ++$self->_stats->{total};
-    ++$self->_stats->{hit};    
-}
-
-sub _miss
-{
-    my ($self) = @_;
-    ++$self->_stats->{total};
-    ++$self->_stats->{miss};
 }
 
 no Any::Moose;

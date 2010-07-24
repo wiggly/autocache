@@ -17,19 +17,9 @@ sub get_cache_record
 {
     my ($self,$name,$normaliser,$coderef,$args,$return_type) = @_;
     get_logger()->debug( "get_cache_record $name" );
-
-    my $key = $self->_generate_cache_key( $name, $normaliser, $args, $return_type );
-
-    my $rec = $self->store->get( $key );
-    unless( $rec )
-    {
-        $self->_miss;
-    }
-    else
-    {
-        $self->_hit;
-    }
-    
+    my $key = $self->_generate_cache_key(
+        $name, $normaliser, $args, $return_type );
+    my $rec = $self->store->get( $key );    
     return $rec;
 }
 
