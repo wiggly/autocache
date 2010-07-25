@@ -20,12 +20,12 @@ Autocache->singleton->get_default_strategy
 my $cached_time = cached_time();
 Autocache->singleton->run_work_queue;
 sleep 2;
-is($cached_time, cached_time(), 'cached_time() returns the cached result on subsequent calls before refresh_age is exceeded');
+is($cached_time, cached_time(), 'Cached result before refresh_age is exceeded');
 Autocache->singleton->run_work_queue;
 sleep 4;
-is($cached_time, cached_time(), 'cached_time() returns the cached result on subsequent calls before refresh_age is exceeded');
+is($cached_time, cached_time(), 'Cached result before refresh_age is exceeded');
 Autocache->singleton->run_work_queue;
-isnt($cached_time, cached_time(), 'cached_time() returns a refreshed result on subsequent calls after refresh_age is exceeded');
+isnt($cached_time, cached_time(), 'Refreshed result after refresh_age is exceeded');
 
 exit;
 
