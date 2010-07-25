@@ -14,7 +14,7 @@ name: Autocache
 provides:
   Autocache:
     file: lib/Autocache.pm
-    version: 0.004_07
+    version: 0.001
   Autocache::Config:
     file: lib/Autocache/Config.pm
   Autocache::Config::Node:
@@ -27,6 +27,10 @@ provides:
     file: lib/Autocache/Store/Memcached.pm
   Autocache::Store::Memory:
     file: lib/Autocache/Store/Memory.pm
+  Autocache::Store::MemoryLRU:
+    file: lib/Autocache/Store/MemoryLRU.pm
+  Autocache::Store::MemoryLRU::Entry:
+    file: lib/Autocache/Store/MemoryLRU/Entry.pm
   Autocache::Store::Null:
     file: lib/Autocache/Store/Null.pm
   Autocache::Strategy:
@@ -51,4 +55,4 @@ requires:
   perl: v5.8.8
 resources:
   license: http://dev.perl.org/licenses/
-version: 0.004_07
+version: 0.001

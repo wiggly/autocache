@@ -29,6 +29,7 @@ lib/Autocache/Strategy/Statistics.pm
 lib/Autocache/WorkQueue.pm
 LICENCE
 MANIFEST
+MANIFEST.SKIP
 META.yml
 README
 t/001_fib.t
