@@ -6,19 +6,16 @@ use warnings;
 our $VERSION = '0.001';
 $VERSION = eval $VERSION;
 
-use Carp;
-use Data::Dumper;
-use Log::Log4perl qw( get_logger );
-
 use Autocache::Config;
 use Autocache::Store::Memory;
 use Autocache::Strategy::Simple;
 use Autocache::WorkQueue;
+use Carp;
+use Log::Log4perl qw( get_logger );
 
 require Exporter;
 
 our @ISA = qw( Exporter );
-our @EXPORT = ();
 our @EXPORT_OK = qw( autocache );
 
 my $SINGLETON;
@@ -327,65 +324,6 @@ sub _use_package
     {
         confess $@;
     }
-}
-
-sub _dump_stats
-{
-    my ($self) = @_;
-    print STDERR "AUTOCACHE STATS\n";
-    foreach my $name ( keys %{$self->{strategy}} )
-    {
-        print STDERR "STRATEGY: $name\n";
-
-        my $strategy = $self->{strategy}{$name};
-
-#        print STDERR "STRAT: ", Dumper( $strategy ), "\n";
-
-        next unless $strategy;
-    
-        my $stats = $strategy->get_statistics();
-
-        if( $stats->{total} > 0 )
-        {
-            printf STDERR "hit  : %8d / %3.2f%%\n",
-                $stats->{hit},
-                ( $stats->{hit} / $stats->{total} ) * 100;
-            printf STDERR "miss : %8d / %3.2f%%\n",
-                $stats->{miss},
-                ( $stats->{miss} / $stats->{total} ) * 100;
-            printf STDERR "total: %d\n", $stats->{total};
-        }
-        else
-        {
-            print STDERR "no statistics available\n";
-        }
-        print STDERR "\n";
-    }
-
-    foreach my $strategy ( values %{$self->{strategy}} )
-    {
-#        print STDERR "STRAT: ", Dumper( $strategy ), "\n";
-
-        next unless $strategy;
-    
-        my $stats = $strategy->get_statistics();
-
-        if( $stats->{total} > 0 )
-        {
-#            printf STDERR "hit  : %-8d / %-3.2f\n",
-#                ( $stats->{hit} / $stats->{total} ) * 100;
-#            printf STDERR "miss : %-8d / %-3.2f\n",
-#                ( $stats->{miss} / $stats->{total} ) * 100;
-#            printf STDERR "total: %d\n", $stats->{total};
-        }
-        else
-        {
-#            print STDERR "no statistics available\n";
-        }
-#        print STDERR "\n";
-    }
-
-    print STDERR "AUTOCACHE STATS DONE\n";
 }
 
 1;
