@@ -59,6 +59,13 @@ sub set
         val => $rec,
         size => total_size( $rec ) ) );
 
+    # remove current entry from cache and heap if we already have one for
+    # this key
+    if( exists $self->_cache->{$key} )
+    {
+        $self->_heap->delete( delete $self->_cache->{$key} );
+    }
+
     my $size = $self->size + $elem->val->size;
 
     while( $size > $self->max_size )
