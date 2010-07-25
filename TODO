@@ -1,10 +1,6 @@
 
 - test memcached
 
-- test refresh
-
-- add cost-based caching strategy
-
 - add shared memory store
 
 - cleanup logging
@@ -13,13 +9,8 @@
 
 - remove debugging to STDERR
 
-- add better way of getting cache stats
-
 - add way of getting cache sizes out
 
 - honour function strategy directives in config
 
 - honour function stratgey parameter in code
-
-- refactor strategy API to completely seperate record creation from
-  retreival/setting
