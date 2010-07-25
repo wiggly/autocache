@@ -1,16 +1,17 @@
 package Autocache;
 
-use version; $VERSION = qv('0.1');
-
 use strict;
 use warnings;
+
+our $VERSION = '0.001';
+$VERSION = eval $VERSION;
 
 use Carp;
 use Data::Dumper;
 use Log::Log4perl qw( get_logger );
 
 use Autocache::Config;
-use Autocache::Store::UnboundedMemory;
+use Autocache::Store::Memory;
 use Autocache::Strategy::Simple;
 use Autocache::WorkQueue;
 
@@ -268,7 +269,7 @@ sub get_default_store
     get_logger()->debug( "get_default_store" );
     unless( $self->{default_store} )
     {
-        $self->{default_store} = Autocache::Store::UnboundedMemory->new;
+        $self->{default_store} = Autocache::Store::Memory->new;
     }
     return $self->{default_store};
 }
