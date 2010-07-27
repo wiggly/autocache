@@ -5,8 +5,7 @@ use Any::Moose;
 extends 'Autocache::Store';
 
 use Cache::Memcached;
-use Log::Log4perl qw( get_logger );
-#use Functions::Log qw( get_logger );
+###l4p use Log::Log4perl qw( get_logger );
 
 #
 # Null Memcached Strategy - never expire, memcached
@@ -22,7 +21,7 @@ has '_memcached' => (
 sub get
 {
     my ($self,$key) = @_;
-    get_logger()->debug( "get: $key" );
+###l4p     get_logger()->debug( "get: $key" );
     return $self->_memcached->get( $key );
 }
 
@@ -33,7 +32,7 @@ sub set
 {
     my ($self,$key,$rec) = @_;
     $self->SUPER::set( $key, $rec );
-    get_logger()->debug( "set: $key" );
+###l4p     get_logger()->debug( "set: $key" );
     $self->_memcached->set( $key, $rec, 0 ); 
 }
 
@@ -43,7 +42,7 @@ sub set
 sub delete
 {
     my ($self,$key) = @_;
-    get_logger()->debug( "delete" );
+###l4p     get_logger()->debug( "delete" );
     $self->_memcached->delete( $key );
 }
 

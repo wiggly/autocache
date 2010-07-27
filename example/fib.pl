@@ -5,8 +5,10 @@ use warnings;
 
 use lib '../lib';
 
-use Autocache qw( autocache );
 use Log::Log4perl qw( :easy );
+use Log::Log4perl::Resurrector;
+
+use Autocache qw( autocache );
 
 Log::Log4perl->easy_init( $DEBUG );
 

@@ -6,7 +6,7 @@ extends 'Autocache::Strategy';
 
 use Autocache;
 use Carp;
-use Log::Log4perl qw( get_logger );
+###l4p use Log::Log4perl qw( get_logger );
 use Scalar::Util qw( weaken );
 
 #
@@ -46,7 +46,7 @@ has 'work_queue' => (
 sub create_cache_record
 {
     my ($self,$name,$normaliser,$coderef,$args,$return_type) = @_;
-    get_logger()->debug( "create_cache_record" );
+###l4p     get_logger()->debug( "create_cache_record" );
     return $self->base_strategy->create_cache_record(
         $name,$normaliser,$coderef,$args,$return_type);
 }
@@ -54,7 +54,7 @@ sub create_cache_record
 sub get_cache_record
 {
     my ($self,$name,$normaliser,$coderef,$args,$return_type) = @_;
-    get_logger()->debug( "get_cache_record" );
+###l4p     get_logger()->debug( "get_cache_record" );
     my $rec = $self->base_strategy->get_cache_record(
         $name, $normaliser, $coderef, $args, $return_type );    
     
@@ -64,8 +64,8 @@ sub get_cache_record
     #
     if( $rec and ( $rec->age > $self->refresh_age ) )
     {
-        get_logger()->debug( "record age  : " . $rec->age );
-        get_logger()->debug( "refresh age : " . $self->refresh_age );
+###l4p         get_logger()->debug( "record age  : " . $rec->age );
+###l4p         get_logger()->debug( "refresh age : " . $self->refresh_age );
 
         $self->work_queue->push(
             $self->_refresh_task(
@@ -78,7 +78,7 @@ sub get_cache_record
 sub set_cache_record
 {
     my ($self,$rec) = @_;
-    get_logger()->debug( "set_cache_record " . $rec->name );
+###l4p     get_logger()->debug( "set_cache_record " . $rec->name );
     return $self->base_strategy->set_cache_record( $rec );    
 }
 
@@ -86,13 +86,13 @@ sub _refresh_task
 {
     my ($self,$name,$normaliser,$coderef,$args,$return_type,$rec) = @_;
 
-    get_logger()->debug( "_refresh_task " . $name );
+###l4p     get_logger()->debug( "_refresh_task " . $name );
 
     weaken $self;
         
     return sub
     {
-        get_logger()->debug( "refreshing record: " . $rec->to_string );
+###l4p         get_logger()->debug( "refreshing record: " . $rec->to_string );
         my $fresh_rec = $self->create_cache_record(
             $name, $normaliser, $coderef, $args, $return_type );
         $self->set_cache_record( $fresh_rec );
@@ -114,7 +114,7 @@ around BUILDARGS => sub
     my $orig = shift;
     my $class = shift;
 
-    get_logger()->debug( __PACKAGE__ . " - BUILDARGS" );
+###l4p     get_logger()->debug( __PACKAGE__ . " - BUILDARGS" );
 
     if( ref $_[0] )
     {
@@ -124,13 +124,13 @@ around BUILDARGS => sub
 
         if( $node = $config->get_node( 'base_strategy' ) )
         {
-            get_logger()->debug( "base strategy node found" );
+###l4p             get_logger()->debug( "base strategy node found" );
             $args{base_strategy} = Autocache->singleton->get_strategy( $node->value );
         }
         
         if( $node = $config->get_node( 'refresh_age' ) )
         {
-            get_logger()->debug( "refresh age node found" );
+###l4p             get_logger()->debug( "refresh age node found" );
             $args{refresh_age} = $node->value;
         }
 
