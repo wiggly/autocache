@@ -140,7 +140,7 @@ around BUILDARGS => sub
 ###l4p             get_logger()->debug( "max_size node found" );
             $args{max_size} = $node->value;
         }
-        
+
         return $class->$orig( %args );
     }
     else

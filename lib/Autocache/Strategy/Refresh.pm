@@ -56,8 +56,8 @@ sub get_cache_record
     my ($self,$name,$normaliser,$coderef,$args,$return_type) = @_;
 ###l4p     get_logger()->debug( "get_cache_record" );
     my $rec = $self->base_strategy->get_cache_record(
-        $name, $normaliser, $coderef, $args, $return_type );    
-    
+        $name, $normaliser, $coderef, $args, $return_type );
+
 
     #
     # TODO - add min refresh time to stop cache stampede for shared caches
@@ -72,14 +72,14 @@ sub get_cache_record
                 $name, $normaliser, $coderef, $args, $return_type, $rec ) );
     }
 
-    return $rec;    
+    return $rec;
 }
 
 sub set_cache_record
 {
     my ($self,$rec) = @_;
 ###l4p     get_logger()->debug( "set_cache_record " . $rec->name );
-    return $self->base_strategy->set_cache_record( $rec );    
+    return $self->base_strategy->set_cache_record( $rec );
 }
 
 sub _refresh_task
@@ -89,7 +89,7 @@ sub _refresh_task
 ###l4p     get_logger()->debug( "_refresh_task " . $name );
 
     weaken $self;
-        
+
     return sub
     {
 ###l4p         get_logger()->debug( "refreshing record: " . $rec->to_string );
@@ -127,7 +127,7 @@ around BUILDARGS => sub
 ###l4p             get_logger()->debug( "base strategy node found" );
             $args{base_strategy} = Autocache->singleton->get_strategy( $node->value );
         }
-        
+
         if( $node = $config->get_node( 'refresh_age' ) )
         {
 ###l4p             get_logger()->debug( "refresh age node found" );

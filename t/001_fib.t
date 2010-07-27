@@ -1,4 +1,4 @@
-#!/usr/bin/perl 
+#!/usr/bin/perl
 
 use strict;
 use warnings;
@@ -18,7 +18,7 @@ exit;
 
 sub fib
 {
-    my ($n) = @_;    
+    my ($n) = @_;
     return 1 if( $n == 1 || $n == 2 );
     return ( fib( $n - 1 ) + fib( $n - 2 ) );
 }

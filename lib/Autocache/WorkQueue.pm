@@ -12,7 +12,7 @@ use Data::Dumper;
 has '_queue' => (
     is => 'rw',
     default => sub { [] },
-    init_arg => undef,    
+    init_arg => undef,
 );
 
 #

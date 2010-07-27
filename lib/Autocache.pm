@@ -62,7 +62,7 @@ sub new
 sub configure
 {
     my ($self) = @_;
-    
+
     foreach my $node ( $self->{config}->get_node( 'store' )->children )
     {
         my $name = $node->name;
@@ -120,12 +120,12 @@ sub configure
     {
         $self->{enable_stats} = $stats->get_node( 'enable' )->value;
     }
-    
+
     if( exists $ENV{AUTOCACHE_STATS} )
     {
         $self->{enable_stats} = $ENV{AUTOCACHE_STATS};
     }
-    
+
     if( $stats->node_exists( 'dump_on_exit' ) )
     {
         $self->{dump_stats} = $stats->get_node( 'dump_on_exit' )->value;
@@ -135,7 +135,7 @@ sub configure
 sub configure_functions
 {
     my ($self,$node,$namespace) = @_;
-    
+
     $namespace ||= '';
 
     if( $node->value )
@@ -177,13 +177,13 @@ sub _cache_function
 ###l4p     get_logger()->debug( "cache : $r / $g"  );
 
     no strict 'refs';
-    
+
     # get generator routine ref
     my $gsub = *{$r}{CODE};
 
     # see if we have a normaliser
     my $gsub_norm = *{$n}{CODE};
-    
+
     unless( defined $gsub_norm )
     {
 ###l4p         get_logger()->debug( "no normaliser, using default" );
@@ -223,7 +223,7 @@ sub get_strategy_for_fn
 {
     my ($self,$name) = @_;
 ###l4p     get_logger()->debug( "get_strategy_for_fn '$name'" );
-    
+
     return $self->get_default_strategy()
         unless exists $self->{fn}{$name}{strategy};
 
@@ -318,7 +318,7 @@ sub _default_normaliser
 sub _use_package
 {
     my ($name) = @_;
-###l4p     get_logger()->debug( "use $name" );    
+###l4p     get_logger()->debug( "use $name" );
     eval "use $name";
     if( $@ )
     {
@@ -393,7 +393,7 @@ A pure function being one;
 
 =item
 
-whose value depends soley on the parameters passed to the function and no other global information, state or input from IO or external devices. 
+whose value depends soley on the parameters passed to the function and no other global information, state or input from IO or external devices.
 
 =item
 
@@ -481,7 +481,7 @@ parameters named 'a', 'b', 'c' and 'd' then the following calls are
 equivalent but autocache can't tell that.
 
     fn( 'a', 3, 'd', 4 );
-    
+
     fn( 'd', 4, 'a', 3 )
 
 To overcome this you can provide a normalisation function that takes the

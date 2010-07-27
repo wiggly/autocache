@@ -30,14 +30,14 @@ sub create_cache_record
         my @value = $coderef->( @$args );
         $value = \@value;
     }
-    
+
     my $key = $self->_generate_cache_key( $name, $normaliser, $args, $return_type );
     my $rec = Autocache::Record->new(
         name => $name,
         key => $key,
         value => $value,
     );
-    return $rec;    
+    return $rec;
 }
 
 #

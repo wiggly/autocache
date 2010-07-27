@@ -40,7 +40,7 @@ sub get_cache_record
     my ($self,$name,$normaliser,$coderef,$args,$return_type) = @_;
 ###l4p     get_logger()->debug( "get_cache_record" );
     my $rec = $self->base_strategy->get_cache_record(
-        $name, $normaliser, $coderef, $args, $return_type );    
+        $name, $normaliser, $coderef, $args, $return_type );
     if( $rec )
     {
         ++$self->statistics->{hit};
@@ -57,7 +57,7 @@ sub set_cache_record
 {
     my ($self,$rec) = @_;
 ###l4p     get_logger()->debug( "set_cache_record " . $rec->name );
-    return $self->base_strategy->set_cache_record( $rec );    
+    return $self->base_strategy->set_cache_record( $rec );
 }
 
 sub _build_base_strategy
@@ -93,7 +93,7 @@ around BUILDARGS => sub
 ###l4p             get_logger()->debug( "base strategy node found" );
             $args{base_strategy} = Autocache->singleton->get_strategy( $node->value );
         }
-        
+
         return $class->$orig( %args );
     }
     else

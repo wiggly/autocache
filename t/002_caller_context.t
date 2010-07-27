@@ -1,4 +1,4 @@
-#!/usr/bin/perl 
+#!/usr/bin/perl
 
 use strict;
 use warnings;
@@ -18,6 +18,6 @@ exit;
 
 sub contextual
 {
-    my ($n) = @_;    
+    my ($n) = @_;
     return wantarray ? qw( a b ) : 'c';
 }

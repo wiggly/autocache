@@ -16,7 +16,7 @@ sub new
 
     if( $filename )
     {
-        confess "configuration file supplied cannot be found/read" 
+        confess "configuration file supplied cannot be found/read"
             unless _file_good( $filename );
         $self->_load_config_file( $filename );
     }

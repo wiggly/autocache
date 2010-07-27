@@ -33,7 +33,7 @@ sub set
     my ($self,$key,$rec) = @_;
     $self->SUPER::set( $key, $rec );
 ###l4p     get_logger()->debug( "set: $key" );
-    $self->_memcached->set( $key, $rec, 0 ); 
+    $self->_memcached->set( $key, $rec, 0 );
 }
 
 #

@@ -1,4 +1,4 @@
-#!/usr/bin/perl 
+#!/usr/bin/perl
 
 use strict;
 use warnings;
@@ -15,7 +15,7 @@ ok( autocache 'cached_time', 'Autocache function' );
 ok( test_refresh(), 'Test refresh' );
 
 Autocache->singleton->get_default_strategy
-	->refresh_age(5);
+    ->refresh_age(5);
 
 my $cached_time = cached_time();
 Autocache->singleton->run_work_queue;
@@ -52,11 +52,11 @@ sub test_refresh
 #        diag( "finish: $finish - cached: $cached" );
 
         Autocache->singleton->run_work_queue;
-        sleep 1;    
+        sleep 1;
     }
     while( $finish > $cached );
 
-    return $ok;    
+    return $ok;
 }
 
 sub cached_time

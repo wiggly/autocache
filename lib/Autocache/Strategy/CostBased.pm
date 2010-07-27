@@ -47,7 +47,7 @@ sub create_cache_record
     my $elapsed = tv_interval ( $t0 );
 
     $rec->{time_cost} = $elapsed * 1_000;
-    
+
 ###l4p     get_logger()->debug( "record time_cost  : " . $rec->time_cost );
 ###l4p     get_logger()->debug( "cost threshold : " . $self->cost_threshold );
 
@@ -100,12 +100,12 @@ around BUILDARGS => sub
 ###l4p             get_logger()->debug( "base strategy node found" );
             $args{base_strategy} = Autocache->singleton->get_strategy( $node->value );
         }
-        
+
         if( $node = $config->get_node( 'cost_threshold' ) )
         {
 ###l4p             get_logger()->debug( "cost threshold node found" );
             my $millis = $node->value;
-            
+
             unless( $millis =~ /^\d+$/ )
             {
                 if( $millis =~ /(\d+)ms/ )

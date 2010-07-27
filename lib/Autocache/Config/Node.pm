@@ -9,7 +9,7 @@ sub new
 {
     my ($class,$name) = @_;
     my $self = { name => $name, value => undef, child => {} };
-    return bless $self, $class;    
+    return bless $self, $class;
 }
 
 sub name
@@ -65,16 +65,16 @@ sub get_node
     my ($self,$path) = @_;
 ###l4p     get_logger()->debug( "get_node: $path" );
     my ($name,$rest) = split /\./, $path, 2;
-    
+
     my $node = $self->{child}{$name};
 
     unless( $node )
     {
-        $node = __PACKAGE__->new( $name );        
+        $node = __PACKAGE__->new( $name );
         $self->{child}{$name} = $node;
     }
 
-    return ( defined $rest ) ? 
+    return ( defined $rest ) ?
         $node->get_node( $rest ) : $node;
 }
 
@@ -85,10 +85,10 @@ sub node_exists
     my ($name,$rest) = split /\./, $path, 2;
 
     return undef unless exists $self->{child}{$name};
-    
+
     my $node = $self->{child}{$name};
 
-    return ( defined $rest ) ? 
+    return ( defined $rest ) ?
         $node->node_exists( $rest ) : $node;
 }
 

@@ -19,7 +19,7 @@ sub get_cache_record
 ###l4p     get_logger()->debug( "get_cache_record $name" );
     my $key = $self->_generate_cache_key(
         $name, $normaliser, $args, $return_type );
-    my $rec = $self->store->get( $key );    
+    my $rec = $self->store->get( $key );
     return $rec;
 }
 
@@ -27,7 +27,7 @@ sub set_cache_record
 {
     my ($self,$rec) = @_;
 ###l4p     get_logger()->debug( "set_cache_record " . $rec->name );
-    return $self->store->set( $rec->key, $rec );    
+    return $self->store->set( $rec->key, $rec );
 }
 
 sub _build_store
@@ -47,10 +47,10 @@ around BUILDARGS => sub
         my $config = $_[0];
         my %args;
         my $node;
-        
+
         if( $config->node_exists( 'store' ) )
         {
-            $node = $config->get_node( 'store' );     
+            $node = $config->get_node( 'store' );
 ###l4p             get_logger()->debug( "found store node in config '" . $node->value . "'" );
             $args{store} = Autocache->singleton->get_store( $node->value );
         }
