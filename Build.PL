@@ -10,11 +10,21 @@ my $builder = Module::Build->new(
     requires => {
 	'perl' => '5.8.8',
         'Any::Moose' => 0,
-	'Devel::Size' => '0.69',
-	'Heap' => '0.80',
-	'Log::Log4perl' => 0,
         'Test::More' => 0,
-	'Time::HiRes' => 0,
+        'Time::HiRes' => 0,
+    },
+    auto_features => {
+        log4perl => {
+            description => 'Log4perl',
+            requires => { 'Log::Log4perl' => '1.12', },
+	},
+	memory_lru => {
+	    description => 'Memory LRU store',
+	    requires => {
+	        'Devel::Size' => '0.69',
+	        'Heap' => '0.80',
+            },
+	},
     },
 );
 
