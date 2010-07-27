@@ -2,8 +2,6 @@ package Autocache::Store;
 
 use Any::Moose;
 
-use Log::Log4perl qw( get_logger );
-
 #
 # get KEY
 #

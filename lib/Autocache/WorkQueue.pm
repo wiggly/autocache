@@ -2,8 +2,7 @@ package Autocache::WorkQueue;
 
 use Any::Moose;
 
-use Log::Log4perl qw( get_logger );
-#use Functions::Log qw( get_logger );
+###l4p use Log::Log4perl qw( get_logger );
 use Data::Dumper;
 
 #
@@ -22,7 +21,7 @@ has '_queue' => (
 sub push
 {
     my ($self,$task) = @_;
-    get_logger()->debug( "push" );
+###l4p     get_logger()->debug( "push" );
     push @{$self->_queue}, $task;
     return 1;
 }
@@ -33,14 +32,14 @@ sub push
 sub pop
 {
     my ($self,$key,$rec) = @_;
-    get_logger()->debug( "pop" );
+###l4p     get_logger()->debug( "pop" );
     shift @{$self->_queue};
 }
 
 sub size
 {
     my ($self,$key,$rec) = @_;
-    get_logger()->debug( "size" );
+###l4p     get_logger()->debug( "size" );
     return scalar @{$self->_queue};
 }
 
@@ -51,7 +50,7 @@ sub size
 sub execute
 {
     my ($self) = @_;
-    get_logger()->debug( "execute" );
+###l4p     get_logger()->debug( "execute" );
     return 0 unless $self->size();
     my $count = 0;
     while( my $task = $self->pop )

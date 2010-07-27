@@ -5,7 +5,7 @@ use Any::Moose;
 extends 'Autocache::Strategy';
 
 use Carp qw( cluck );
-use Log::Log4perl qw( get_logger );
+###l4p use Log::Log4perl qw( get_logger );
 
 has 'store' => (
     is => 'ro',
@@ -16,7 +16,7 @@ has 'store' => (
 sub get_cache_record
 {
     my ($self,$name,$normaliser,$coderef,$args,$return_type) = @_;
-    get_logger()->debug( "get_cache_record $name" );
+###l4p     get_logger()->debug( "get_cache_record $name" );
     my $key = $self->_generate_cache_key(
         $name, $normaliser, $args, $return_type );
     my $rec = $self->store->get( $key );    
@@ -26,7 +26,7 @@ sub get_cache_record
 sub set_cache_record
 {
     my ($self,$rec) = @_;
-    get_logger()->debug( "set_cache_record " . $rec->name );
+###l4p     get_logger()->debug( "set_cache_record " . $rec->name );
     return $self->store->set( $rec->key, $rec );    
 }
 
@@ -40,7 +40,7 @@ around BUILDARGS => sub
     my $orig = shift;
     my $class = shift;
 
-    get_logger()->debug( __PACKAGE__ . " - BUILDARGS" );
+###l4p     get_logger()->debug( __PACKAGE__ . " - BUILDARGS" );
 
     if( ref $_[0] )
     {
@@ -51,7 +51,7 @@ around BUILDARGS => sub
         if( $config->node_exists( 'store' ) )
         {
             $node = $config->get_node( 'store' );     
-            get_logger()->debug( "found store node in config '" . $node->value . "'" );
+###l4p             get_logger()->debug( "found store node in config '" . $node->value . "'" );
             $args{store} = Autocache->singleton->get_store( $node->value );
         }
 

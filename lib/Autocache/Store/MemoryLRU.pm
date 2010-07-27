@@ -8,7 +8,7 @@ use Autocache::Store::MemoryLRU::Entry;
 use Devel::Size qw( total_size );
 use Heap::Binary;
 use Heap::Elem::Ref qw( RefElem );
-use Log::Log4perl qw( get_logger );
+###l4p use Log::Log4perl qw( get_logger );
 
 has 'size' => (
     is => 'rw',
@@ -38,7 +38,7 @@ has '_cache' => (
 sub get
 {
     my ($self,$key) = @_;
-    get_logger()->debug( "get: $key" );
+###l4p     get_logger()->debug( "get: $key" );
     return unless exists $self->_cache->{$key};
     my $elem = $self->_cache->{$key};
     $self->_heap->delete( $elem );
@@ -53,7 +53,7 @@ sub get
 sub set
 {
     my ($self,$key,$rec) = @_;
-    get_logger()->debug( "set: $key" );
+###l4p     get_logger()->debug( "set: $key" );
     my $elem = RefElem( Autocache::Store::MemoryLRU::Entry->new(
         key => $key,
         val => $rec,
@@ -63,11 +63,11 @@ sub set
 
     while( $size > $self->max_size )
     {
-        get_logger()->debug( "cache size: $size" );
+###l4p         get_logger()->debug( "cache size: $size" );
 
         my $lru = $self->_heap->extract_top;
 
-        get_logger()->debug( "LRU key: " . $lru->val->key );
+###l4p         get_logger()->debug( "LRU key: " . $lru->val->key );
 
         $size -= $lru->val->size;
         delete $self->_cache->{$lru->val->key};
@@ -85,7 +85,7 @@ sub set
 sub delete
 {
     my ($self,$key) = @_;
-    get_logger()->debug( "delete: $key" );
+###l4p     get_logger()->debug( "delete: $key" );
     my $elem = delete $self->_cache->{$key};
     $self->_heap->delete( $elem );
     $self->size( $self->size - $elem->val->size );
@@ -98,7 +98,7 @@ sub delete
 sub clear
 {
     my ($self,$key) = @_;
-    get_logger()->debug( "clear" );
+###l4p     get_logger()->debug( "clear" );
     $self->_cache = {};
     $self->_heap = Heap::Binary->new;
     $self->size( 0 );
@@ -119,7 +119,7 @@ around BUILDARGS => sub
     my $orig = shift;
     my $class = shift;
 
-    get_logger()->debug( __PACKAGE__ . " - BUILDARGS" );
+###l4p     get_logger()->debug( __PACKAGE__ . " - BUILDARGS" );
 
     if( ref $_[0] )
     {
@@ -129,7 +129,7 @@ around BUILDARGS => sub
 
         if( $node = $config->get_node( 'max_size' ) )
         {
-            get_logger()->debug( "max_size node found" );
+###l4p             get_logger()->debug( "max_size node found" );
             $args{max_size} = $node->value;
         }
         

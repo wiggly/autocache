@@ -2,13 +2,15 @@
 
 use strict;
 use warnings;
-use Log::Log4perl qw( :easy );
-
-Log::Log4perl->easy_init( $DEBUG );
 
 use lib '../lib';
 
+use Log::Log4perl qw( :easy );
+use Log::Log4perl::Resurrector;
+
 use Autocache qw( autocache );
+
+Log::Log4perl->easy_init( $DEBUG );
 
 Autocache->initialise( filename => './variable_cost.conf' );
 

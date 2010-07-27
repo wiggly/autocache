@@ -3,7 +3,7 @@ package Autocache::Strategy;
 use Any::Moose;
 
 use Autocache::Record;
-use Log::Log4perl qw( get_logger );
+###l4p use Log::Log4perl qw( get_logger );
 
 sub get_cache_record { return undef; }
 
@@ -18,7 +18,7 @@ sub set_cache_record { return undef; }
 sub create_cache_record
 {
     my ($self,$name,$normaliser,$coderef,$args,$return_type) = @_;
-    get_logger()->debug( "create_cache_record" );
+###l4p     get_logger()->debug( "create_cache_record" );
     my $value;
 
     if( $return_type eq 'S' )
@@ -47,7 +47,7 @@ sub create_cache_record
 sub _generate_cache_key
 {
     my ($self,$name,$normaliser,$args,$return_type) = @_;
-    get_logger()->debug( "_generate_cache_key" );
+###l4p     get_logger()->debug( "_generate_cache_key" );
     return sprintf 'AC-%s-%s-%s',
         $return_type, $name, $normaliser->( @$args );
 }

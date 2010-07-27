@@ -3,12 +3,12 @@ package Autocache;
 use strict;
 use warnings;
 
-our $VERSION = '0.001';
+our $VERSION = '0.002';
 $VERSION = eval $VERSION;
 
 use Carp;
 use Data::Dumper;
-use Log::Log4perl qw( get_logger );
+###l4p use Log::Log4perl qw( get_logger );
 
 use Autocache::Config;
 use Autocache::Store::Memory;
@@ -26,7 +26,7 @@ my $SINGLETON;
 sub autocache
 {
     my ($name,$args) = @_;
-    get_logger()->debug( "autocache $name" );
+###l4p     get_logger()->debug( "autocache $name" );
     my $package = caller;
     __PACKAGE__->singleton->_cache_function( $package, $name, $args );
 }
@@ -143,7 +143,7 @@ sub configure_functions
 
     if( $node->value )
     {
-        get_logger()->debug( "fn: $namespace -> " . $node->value );
+###l4p         get_logger()->debug( "fn: $namespace -> " . $node->value );
 
         $self->{fn}{$namespace}{strategy} = $node->value;
     }
@@ -157,7 +157,7 @@ sub configure_functions
 sub cache_function
 {
     my ($self,$name,$args) = @_;
-    get_logger()->debug( "cache_function '$name'" );
+###l4p     get_logger()->debug( "cache_function '$name'" );
     my $package = caller;
     $self->_cache_function( $package, $name, $args );
 }
@@ -166,7 +166,7 @@ sub _cache_function
 {
     my ($self,$package,$name,$args) = @_;
 
-    get_logger()->debug( "_cache_function '$name'" );
+###l4p     get_logger()->debug( "_cache_function '$name'" );
 
     # r : cache routine name
     my $r = '::' . $package . '::' . $name;
@@ -177,7 +177,7 @@ sub _cache_function
     # g : generator routine name
     my $g = __PACKAGE__ . '::G' . $r;
 
-    get_logger()->debug( "cache : $r / $g"  );
+###l4p     get_logger()->debug( "cache : $r / $g"  );
 
     no strict 'refs';
     
@@ -189,7 +189,7 @@ sub _cache_function
     
     unless( defined $gsub_norm )
     {
-        get_logger()->debug( "no normaliser, using default" );
+###l4p         get_logger()->debug( "no normaliser, using default" );
         $gsub_norm = $self->get_default_normaliser();
     }
 
@@ -207,14 +207,14 @@ sub _cache_function
 sub run_work_queue
 {
     my($self) = @_;
-    get_logger()->debug( "run_work_queue" );
+###l4p     get_logger()->debug( "run_work_queue" );
     $self->get_work_queue()->execute();
 }
 
 sub get_work_queue
 {
     my ($self) = @_;
-    get_logger()->debug( "get_work_queue" );
+###l4p     get_logger()->debug( "get_work_queue" );
     unless( $self->{work_queue} )
     {
         $self->{work_queue} = Autocache::WorkQueue->new();
@@ -225,7 +225,7 @@ sub get_work_queue
 sub get_strategy_for_fn
 {
     my ($self,$name) = @_;
-    get_logger()->debug( "get_strategy_for_fn '$name'" );
+###l4p     get_logger()->debug( "get_strategy_for_fn '$name'" );
     
     return $self->get_default_strategy()
         unless exists $self->{fn}{$name}{strategy};
@@ -236,7 +236,7 @@ sub get_strategy_for_fn
 sub get_strategy
 {
     my ($self,$name) = @_;
-    get_logger()->debug( "get_strategy '$name'" );
+###l4p     get_logger()->debug( "get_strategy '$name'" );
     confess "cannot find strategy $name"
         unless $self->{strategy}{$name};
     return $self->{strategy}{$name};
@@ -245,7 +245,7 @@ sub get_strategy
 sub get_store
 {
     my ($self,$name) = @_;
-    get_logger()->debug( "get_store '$name'" );
+###l4p     get_logger()->debug( "get_store '$name'" );
     confess "cannot find store $name"
         unless $self->{store}{$name};
     return $self->{store}{$name};
@@ -254,7 +254,7 @@ sub get_store
 sub get_default_strategy
 {
     my ($self) = @_;
-    get_logger()->debug( "get_default_strategy" );
+###l4p     get_logger()->debug( "get_default_strategy" );
     unless( $self->{default_strategy} )
     {
         $self->{default_strategy} = Autocache::Strategy::Simple->new(
@@ -266,7 +266,7 @@ sub get_default_strategy
 sub get_default_store
 {
     my ($self) = @_;
-    get_logger()->debug( "get_default_store" );
+###l4p     get_logger()->debug( "get_default_store" );
     unless( $self->{default_store} )
     {
         $self->{default_store} = Autocache::Store::Memory->new;
@@ -277,22 +277,22 @@ sub get_default_store
 sub get_default_normaliser
 {
     my ($self) = @_;
-    get_logger()->debug( "get_default_normaliser" );
+###l4p     get_logger()->debug( "get_default_normaliser" );
     return \&_default_normaliser;
 }
 
 sub _generate_cached_fn
 {
     my ($self,$name,$normaliser,$coderef) = @_;
-    get_logger()->debug( "_generate_cached_fn $name" );
+###l4p     get_logger()->debug( "_generate_cached_fn $name" );
 
     return sub
     {
-        get_logger()->debug( "CACHE $name" );
+###l4p         get_logger()->debug( "CACHE $name" );
         return unless defined wantarray;
         my $return_type = wantarray ? 'L' : 'S';
 
-        get_logger()->debug( "return type: $return_type" );
+###l4p         get_logger()->debug( "return type: $return_type" );
 
         my $strategy = $self->get_strategy_for_fn( $name );
 
@@ -314,14 +314,14 @@ sub _generate_cached_fn
 
 sub _default_normaliser
 {
-    get_logger()->debug( "_default_normaliser" );
+###l4p     get_logger()->debug( "_default_normaliser" );
     return join ':', @_;
 }
 
 sub _use_package
 {
     my ($name) = @_;
-    get_logger()->debug( "use $name" );    
+###l4p     get_logger()->debug( "use $name" );    
     eval "use $name";
     if( $@ )
     {
