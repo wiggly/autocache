@@ -94,6 +94,7 @@ sub delete
     my ($self,$key) = @_;
     get_logger()->debug( "delete: $key" );
     my $elem = delete $self->_cache->{$key};
+    return unless $elem;
     $self->_heap->delete( $elem );
     $self->size( $self->size - $elem->val->size );
     return $elem->val->val;
