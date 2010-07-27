@@ -14,7 +14,7 @@ name: Autocache
 provides:
   Autocache:
     file: lib/Autocache.pm
-    version: 0.001
+    version: 0.002
   Autocache::Config:
     file: lib/Autocache/Config.pm
   Autocache::Config::Node:
@@ -47,12 +47,9 @@ provides:
     file: lib/Autocache/WorkQueue.pm
 requires:
   Any::Moose: 0
-  Devel::Size: 0.69
-  Heap: 0.80
-  Log::Log4perl: 0
   Test::More: 0
   Time::HiRes: 0
   perl: v5.8.8
 resources:
   license: http://dev.perl.org/licenses/
-version: 0.001
+version: 0.002

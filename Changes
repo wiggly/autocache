@@ -1,6 +1,13 @@
 
 Autocache revision history
 
+0.002 - 2010-07-27
+
+Hide log4perl statements using Resurrector functionality
+
+Modify requirements so that we can install without those required by
+the MemoryLRU store
+
 0.001 - 2010-07-24
 
 Initial release.
