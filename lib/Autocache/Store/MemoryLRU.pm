@@ -63,6 +63,7 @@ sub set
     # this key
     if( exists $self->_cache->{$key} )
     {
+###l4p         get_logger()->debug( "removing existing value for key" );
         $self->_heap->delete( delete $self->_cache->{$key} );
     }
 
