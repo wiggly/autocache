@@ -13,20 +13,20 @@ has 'store' => (
     lazy_build => 1,
 );
 
-sub get_cache_record
+sub get
 {
     my ($self,$name,$normaliser,$coderef,$args,$return_type) = @_;
-###l4p     get_logger()->debug( "get_cache_record $name" );
+###l4p     get_logger()->debug( "get $name" );
     my $key = $self->_generate_cache_key(
         $name, $normaliser, $args, $return_type );
     my $rec = $self->store->get( $key );
     return $rec;
 }
 
-sub set_cache_record
+sub set
 {
     my ($self,$rec) = @_;
-###l4p     get_logger()->debug( "set_cache_record " . $rec->name );
+###l4p     get_logger()->debug( "set " . $rec->name );
     return $self->store->set( $rec->key, $rec );
 }
 

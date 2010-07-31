@@ -5,9 +5,9 @@ use Any::Moose;
 use Autocache::Record;
 ###l4p use Log::Log4perl qw( get_logger );
 
-sub get_cache_record { return undef; }
+sub get { return undef; }
 
-sub set_cache_record { return undef; }
+sub set { return undef; }
 
 #
 # create a cache record by invoking the function to be cached
@@ -15,10 +15,10 @@ sub set_cache_record { return undef; }
 # this generates a basic cache record, strategies built on top of this
 # should feel free to add their own data elements to the cache record
 #
-sub create_cache_record
+sub create
 {
     my ($self,$name,$normaliser,$coderef,$args,$return_type) = @_;
-###l4p     get_logger()->debug( "create_cache_record" );
+###l4p     get_logger()->debug( "create" );
     my $value;
 
     if( $return_type eq 'S' )

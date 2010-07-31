@@ -293,14 +293,14 @@ sub _generate_cached_fn
 
         my $strategy = $self->get_strategy_for_fn( $name );
 
-        my $rec = $strategy->get_cache_record(
+        my $rec = $strategy->get(
             $name, $normaliser, $coderef, \@_, $return_type );
 
         unless( $rec )
         {
-            $rec = $strategy->create_cache_record(
+            $rec = $strategy->create(
                 $name, $normaliser, $coderef, \@_, $return_type );
-            $strategy->set_cache_record( $rec );
+            $strategy->set( $rec );
         }
 
         my $value = $rec->value;

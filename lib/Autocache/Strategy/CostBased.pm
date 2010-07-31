@@ -34,14 +34,14 @@ has 'base_strategy' => (
     lazy_build => 1,
 );
 
-sub create_cache_record
+sub create
 {
     my ($self,$name,$normaliser,$coderef,$args,$return_type) = @_;
-###l4p     get_logger()->debug( "create_cache_record" );
+###l4p     get_logger()->debug( "create" );
 
     my $t0 = [gettimeofday];
 
-    my $rec = $self->base_strategy->create_cache_record(
+    my $rec = $self->base_strategy->create(
         $name,$normaliser,$coderef,$args,$return_type);
 
     my $elapsed = tv_interval ( $t0 );
@@ -54,26 +54,26 @@ sub create_cache_record
     return $rec;
 }
 
-sub get_cache_record
+sub get
 {
     my ($self,$name,$normaliser,$coderef,$args,$return_type) = @_;
-###l4p     get_logger()->debug( "get_cache_record" );
+###l4p     get_logger()->debug( "get" );
 
-    my $rec = $self->base_strategy->get_cache_record(
+    my $rec = $self->base_strategy->get(
         $name, $normaliser, $coderef, $args, $return_type );
 
     return $rec;
 }
 
-sub set_cache_record
+sub set
 {
     my ($self,$rec) = @_;
-###l4p     get_logger()->debug( "set_cache_record " . $rec->name );
+###l4p     get_logger()->debug( "set " . $rec->name );
     # only put in cache if it has exceeded our cost threshold
     if( $rec->time_cost > $self->cost_threshold )
     {
 ###l4p         get_logger()->debug( "cost threshold exceeded setting in cache" );
-        return $self->base_strategy->set_cache_record( $rec );
+        return $self->base_strategy->set( $rec );
     }
 }
 

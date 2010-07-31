@@ -26,20 +26,20 @@ has 'statistics' => (
     lazy_build => 1,
 );
 
-sub create_cache_record
+sub create
 {
     my ($self,$name,$normaliser,$coderef,$args,$return_type) = @_;
-###l4p     get_logger()->debug( "create_cache_record" );
+###l4p     get_logger()->debug( "create" );
     ++$self->statistics->{create};
-    return $self->base_strategy->create_cache_record(
+    return $self->base_strategy->create(
         $name,$normaliser,$coderef,$args,$return_type);
 }
 
-sub get_cache_record
+sub get
 {
     my ($self,$name,$normaliser,$coderef,$args,$return_type) = @_;
-###l4p     get_logger()->debug( "get_cache_record" );
-    my $rec = $self->base_strategy->get_cache_record(
+###l4p     get_logger()->debug( "get" );
+    my $rec = $self->base_strategy->get(
         $name, $normaliser, $coderef, $args, $return_type );
     if( $rec )
     {
@@ -53,11 +53,11 @@ sub get_cache_record
     return $rec;
 }
 
-sub set_cache_record
+sub set
 {
     my ($self,$rec) = @_;
-###l4p     get_logger()->debug( "set_cache_record " . $rec->name );
-    return $self->base_strategy->set_cache_record( $rec );
+###l4p     get_logger()->debug( "set " . $rec->name );
+    return $self->base_strategy->set( $rec );
 }
 
 sub _build_base_strategy
