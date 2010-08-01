@@ -9,6 +9,8 @@ strategy.
 Split MemoryLRU store into seperate eviction stratgey that can be layered on
 top of the existing Memory strategy.
 
+Added request object to encapsulate information required to serve a request.
+
 0.002 - 2010-07-27
 
 Hide log4perl statements using Resurrector functionality
