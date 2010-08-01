@@ -34,15 +34,17 @@ has 'base_strategy' => (
     lazy_build => 1,
 );
 
+#
+# create REQ
+#
 sub create
 {
-    my ($self,$name,$normaliser,$coderef,$args,$return_type) = @_;
+    my ($self,$req) = @_;
 ###l4p     get_logger()->debug( "create" );
 
     my $t0 = [gettimeofday];
 
-    my $rec = $self->base_strategy->create(
-        $name,$normaliser,$coderef,$args,$return_type);
+    my $rec = $self->base_strategy->create( $req );
 
     my $elapsed = tv_interval ( $t0 );
 
@@ -54,27 +56,47 @@ sub create
     return $rec;
 }
 
+#
+# get REQ
+#
 sub get
 {
-    my ($self,$name,$normaliser,$coderef,$args,$return_type) = @_;
+    my ($self,$req) = @_;
 ###l4p     get_logger()->debug( "get" );
 
-    my $rec = $self->base_strategy->get(
-        $name, $normaliser, $coderef, $args, $return_type );
+    my $rec = $self->base_strategy->get( $req );
 
     return $rec;
 }
 
+#
+# set REQ REC
+#
 sub set
 {
-    my ($self,$rec) = @_;
+    my ($self,$req,$rec) = @_;
 ###l4p     get_logger()->debug( "set " . $rec->name );
     # only put in cache if it has exceeded our cost threshold
     if( $rec->time_cost > $self->cost_threshold )
     {
 ###l4p         get_logger()->debug( "cost threshold exceeded setting in cache" );
-        return $self->base_strategy->set( $rec );
+        return $self->base_strategy->set( $req, $rec );
     }
+}
+
+#
+# delete KEY
+#
+sub delete
+{
+    my ($self,$key) = @_;
+    return $self->base_strategy->delete( $key );
+}
+
+sub clear
+{
+    my ($self) = @_;
+    return $self->base_strategy->clear;
 }
 
 sub _build_base_strategy

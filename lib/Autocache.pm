@@ -9,7 +9,8 @@ $VERSION = eval $VERSION;
 use Autocache::Config;
 use Autocache::Strategy::Store::Memory;
 #use Autocache::Store::Memory;
-use Autocache::Strategy::Simple;
+use Autocache::Request;
+#use Autocache::Strategy::Simple;
 use Autocache::WorkQueue;
 use Carp;
 ###l4p use Log::Log4perl qw( get_logger );
@@ -51,7 +52,6 @@ sub new
     my $self =
         {
             config => $config,
-            store => {},
             strategy => {},
             default_strategy => undef,
             work_queue => undef,
@@ -64,24 +64,24 @@ sub configure
 {
     my ($self) = @_;
 
-    foreach my $node ( $self->{config}->get_node( 'store' )->children )
-    {
-        my $name = $node->name;
-        my $package = $node->value;
-        _use_package( $package );
-
-        my $store;
-
-        eval
-        {
-            $store = $package->new( $node );
-        };
-        if( $@ )
-        {
-            confess "cannot create store $name using package $package - $@";
-        }
-        $self->{store}{$node->name} = $store;
-    }
+#    foreach my $node ( $self->{config}->get_node( 'store' )->children )
+#    {
+#        my $name = $node->name;
+#        my $package = $node->value;
+#        _use_package( $package );
+#
+#        my $store;
+#
+ #       eval
+ ##       {
+ #           $store = $package->new( $node );
+ #       };
+ #       if( $@ )
+ #       {
+ #           confess "cannot create store $name using package $package - $@";
+ #       }
+ #       $self->{store}{$node->name} = $store;
+ #   }
 
     foreach my $node ( $self->{config}->get_node( 'strategy' )->children )
     {
@@ -240,14 +240,14 @@ sub get_strategy
     return $self->{strategy}{$name};
 }
 
-sub get_store
-{
-    my ($self,$name) = @_;
-###l4p     get_logger()->debug( "get_store '$name'" );
-    confess "cannot find store $name"
-        unless $self->{store}{$name};
-    return $self->{store}{$name};
-}
+#sub get_store
+#{
+#    my ($self,$name) = @_;
+####l4p     get_logger()->debug( "get_store '$name'" );
+#    confess "cannot find store $name"
+#        unless $self->{store}{$name};
+ #   return $self->{store}{$name};
+#}#
 
 sub get_default_strategy
 {
@@ -255,22 +255,21 @@ sub get_default_strategy
 ###l4p     get_logger()->debug( "get_default_strategy" );
     unless( $self->{default_strategy} )
     {
-        $self->{default_strategy} = Autocache::Strategy::Simple->new(
-            store => $self->get_default_store() );
+        $self->{default_strategy} = Autocache::Strategy::Store::Memory->new;
     }
     return $self->{default_strategy};
 }
 
-sub get_default_store
-{
-    my ($self) = @_;
-###l4p     get_logger()->debug( "get_default_store" );
-    unless( $self->{default_store} )
-    {
-        $self->{default_store} = Autocache::Strategy::Store::Memory->new;
-    }
-    return $self->{default_store};
-}
+#sub get_default_store
+#{
+#    my ($self) = @_;
+####l4p     get_logger()->debug( "get_default_store" );
+#    unless( $self->{default_store} )
+#    {
+#        $self->{default_store} = Autocache::Strategy::Store::Memory->new;
+#    }
+#    return $self->{default_store};
+#}
 
 sub get_default_normaliser
 {
@@ -288,20 +287,26 @@ sub _generate_cached_fn
     {
 ###l4p         get_logger()->debug( "CACHE $name" );
         return unless defined wantarray;
-        my $return_type = wantarray ? 'L' : 'S';
+        my $context = wantarray ? 'L' : 'S';
 
-###l4p         get_logger()->debug( "return type: $return_type" );
+###l4p         get_logger()->debug( "calling context: $context" );
+
+        my $request = Autocache::Request->new(
+            name => $name,
+            normaliser => $normaliser,
+            generator => $coderef,
+            args => \@_,
+            context => $context,
+        );
 
         my $strategy = $self->get_strategy_for_fn( $name );
 
-        my $rec = $strategy->get(
-            $name, $normaliser, $coderef, \@_, $return_type );
+        my $rec = $strategy->get( $request );
 
         unless( $rec )
         {
-            $rec = $strategy->create(
-                $name, $normaliser, $coderef, \@_, $return_type );
-            $strategy->set( $rec );
+            $rec = $strategy->create( $request );
+            $strategy->set( $request, $rec );
         }
 
         my $value = $rec->value;

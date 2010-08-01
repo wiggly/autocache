@@ -1,8 +1,8 @@
-package Autocache::Store::Memcached;
+package Autocache::Strategy::Store::Memcached;
 
 use Any::Moose;
 
-extends 'Autocache::Store';
+extends 'Autocache::Strategy';
 
 use Cache::Memcached;
 ###l4p use Log::Log4perl qw( get_logger );
@@ -16,13 +16,13 @@ has '_memcached' => (
     init_arg => 'memcached', );
 
 #
-# get KEY
+# get REQ
 #
 sub get
 {
-    my ($self,$key) = @_;
-###l4p     get_logger()->debug( "get: $key" );
-    return $self->_memcached->get( $key );
+    my ($self,$req) = @_;
+###l4p     get_logger()->debug( "get: " . $req->key );
+    return $self->_memcached->get( $req->key );
 }
 
 #
@@ -30,10 +30,9 @@ sub get
 #
 sub set
 {
-    my ($self,$key,$rec) = @_;
-    $self->SUPER::set( $key, $rec );
-###l4p     get_logger()->debug( "set: $key" );
-    $self->_memcached->set( $key, $rec, 0 );
+    my ($self,$req,$rec) = @_;
+###l4p     get_logger()->debug( "set: " . $req->key );
+    $self->_memcached->set( $req->key, $rec, 0 );
 }
 
 #

@@ -13,24 +13,24 @@ has '_cache' => (
 );
 
 #
-# get KEY
+# get REQ
 #
 sub get
 {
-    my ($self,$key) = @_;
-###l4p     get_logger()->debug( "get: $key" );
-    return unless exists $self->_cache->{$key};
-    return $self->_cache->{$key};
+    my ($self,$req) = @_;
+###l4p     get_logger()->debug( "get: " . $req->key );
+    return unless exists $self->_cache->{$req->key};
+    return $self->_cache->{$req->key};
 }
 
 #
-# set KEY RECORD
+# set REQ REC
 #
 sub set
 {
-    my ($self,$key,$rec) = @_;
-###l4p    get_logger()->debug( "set: $key" );
-    $self->_cache->{$key} = $rec;
+    my ($self,$req,$rec) = @_;
+###l4p    get_logger()->debug( "set: " . $req->key );
+    $self->_cache->{$req->key} = $rec;
 }
 
 #

@@ -2,7 +2,7 @@ package Autocache::Strategy::Eviction::LRU;
 
 use Any::Moose;
 
-extends 'Autocache::Store';
+extends 'Autocache::Strategy';
 
 use Autocache::Strategy::Eviction::LRU::Entry;
 use Carp qw( confess );
@@ -47,26 +47,26 @@ has 'base_strategy' => (
 );
 
 #
-# get KEY
+# get REQ
 #
 sub get
 {
-    my ($self,$key) = @_;
+    my ($self,$req) = @_;
 ###l4p     get_logger()->debug( "get: $key" );
 
-    my $rec = $self->base_strategy->get( $key );
+    my $rec = $self->base_strategy->get( $req );
 
     unless( $rec )
     {
         # check that we don't have an entry for the key that exists in our
         # base strategy
         confess "base strategy contains more records than we are aware of"
-            if exists $self->_map->{$key};
+            if exists $self->_map->{$req->key};
 
         return undef;
     }
 
-    my $elem = $self->_map->{$key};    
+    my $elem = $self->_map->{$req->key};
 
     confess "base strategy contains record but our map is unaware of it"
         unless $elem;
@@ -80,21 +80,21 @@ sub get
 }
 
 #
-# set KEY RECORD
+# set REQ REC
 #
 sub set
 {
-    my ($self,$key,$rec) = @_;
+    my ($self,$req,$rec) = @_;
 ###l4p     get_logger()->debug( "set: $key" );
     my $elem = RefElem( Autocache::Strategy::Eviction::LRU::Entry->new(
-        key => $key,
+        key => $req->key,
         size => total_size( $rec ) ) );
 
     my $size = $self->size + $elem->val->size;
 
     # remove current entry from heap if we already have one for
     # this key
-    if( my $tmp = delete $self->_map->{$key} )
+    if( my $tmp = delete $self->_map->{$req->key} )
     {
 ###l4p         get_logger()->debug( "removing existing value for key" );
         $self->_heap->delete( $tmp );
@@ -116,8 +116,8 @@ sub set
 
     $self->size( $size );
     $self->_heap->add( $elem );
-    $self->_map->{$key} = $elem;
-    return $self->base_strategy->set( $key, $rec );
+    $self->_map->{$req->key} = $elem;
+    return $self->base_strategy->set( $req, $rec );
 }
 
 #

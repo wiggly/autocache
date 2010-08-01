@@ -5,14 +5,29 @@ use Any::Moose;
 use Autocache::Record;
 ###l4p use Log::Log4perl qw( get_logger );
 
+#
+# get REQ
+#
 sub get { return undef; }
 
-sub set { return $_[1]; }
+#
+# set REQ REC
+#
+sub set { return $_[2]; }
 
+#
+# delete KEY
+#
+# should we send the request all the way through here too?
+#
 sub delete { return undef; }
 
 sub clear { return undef; }
 
+
+#
+# create REQ
+#
 #
 # create a cache record by invoking the function to be cached
 #
@@ -21,39 +36,27 @@ sub clear { return undef; }
 #
 sub create
 {
-    my ($self,$name,$normaliser,$coderef,$args,$return_type) = @_;
+    my ($self,$req) = @_;
 ###l4p     get_logger()->debug( "create" );
     my $value;
 
-    if( $return_type eq 'S' )
+    if( $req->context eq 'S' )
     {
-        $value = $coderef->( @$args );
+        $value = $req->generator->( @{$req->args} );
     }
     else
     {
-        my @value = $coderef->( @$args );
+        my @value = $req->generator->( @{$req->args} );
         $value = \@value;
     }
 
-    my $key = $self->_generate_cache_key( $name, $normaliser, $args, $return_type );
     my $rec = Autocache::Record->new(
-        name => $name,
-        key => $key,
+        name => $req->name,
+        key => $req->key,
         value => $value,
     );
-    return $rec;
-}
 
-#
-# take the name of a function, a normaliser and arguments, return the cache
-# key to use for this combination
-#
-sub _generate_cache_key
-{
-    my ($self,$name,$normaliser,$args,$return_type) = @_;
-###l4p     get_logger()->debug( "_generate_cache_key" );
-    return sprintf 'AC-%s-%s-%s',
-        $return_type, $name, $normaliser->( @$args );
+    return $rec;
 }
 
 no Any::Moose;

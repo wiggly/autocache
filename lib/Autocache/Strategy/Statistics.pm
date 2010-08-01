@@ -26,21 +26,26 @@ has 'statistics' => (
     lazy_build => 1,
 );
 
+#
+# create REQ
+#
 sub create
 {
-    my ($self,$name,$normaliser,$coderef,$args,$return_type) = @_;
+    my ($self,$req) = @_;
 ###l4p     get_logger()->debug( "create" );
     ++$self->statistics->{create};
-    return $self->base_strategy->create(
-        $name,$normaliser,$coderef,$args,$return_type);
+    return $self->base_strategy->create( $req );
 }
 
+#
+# get REQ
+#
 sub get
 {
-    my ($self,$name,$normaliser,$coderef,$args,$return_type) = @_;
+    my ($self,$req) = @_;
 ###l4p     get_logger()->debug( "get" );
     my $rec = $self->base_strategy->get(
-        $name, $normaliser, $coderef, $args, $return_type );
+        $req );
     if( $rec )
     {
         ++$self->statistics->{hit};
@@ -53,11 +58,29 @@ sub get
     return $rec;
 }
 
+#
+# REQ REC
+#
 sub set
 {
-    my ($self,$rec) = @_;
+    my ($self,$req,$rec) = @_;
 ###l4p     get_logger()->debug( "set " . $rec->name );
-    return $self->base_strategy->set( $rec );
+    return $self->base_strategy->set( $req, $rec );
+}
+
+#
+# delete KEY
+#
+sub delete
+{
+    my ($self,$key) = @_;
+    return $self->base_strategy->delete( $key );
+}
+
+sub clear
+{
+    my ($self) = @_;
+    return $self->base_strategy->clear;
 }
 
 sub _build_base_strategy
