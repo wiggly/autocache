@@ -1,4 +1,4 @@
-package Autocache::Store::MemoryLRU::Entry;
+package Autocache::Strategy::Eviction::LRU::Entry;
 
 use Any::Moose;
 
@@ -7,12 +7,6 @@ use Time::HiRes qw( time );
 has 'key' => (
     is => 'ro',
     isa => 'Str',
-    required => 1,
-);
-
-has 'val' => (
-    is => 'ro',
-    isa => 'Autocache::Record',
     required => 1,
 );
 

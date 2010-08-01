@@ -3,7 +3,11 @@ Autocache revision history
 
 0.003 - ????-??-??
 
-ADD CHANGES HERE
+Removed distinction between strategies and stores. Stores are now a kind of
+strategy.
+
+Split MemoryLRU store into seperate eviction stratgey that can be layered on
+top of the existing Memory strategy.
 
 0.002 - 2010-07-27
 

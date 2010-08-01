@@ -9,7 +9,8 @@ use Test::More tests => 10;
 ###l4p use Log::Log4perl::Resurrector;
 
 use Autocache::Record;
-use Autocache::Store::MemoryLRU;
+use Autocache::Strategy::Eviction::LRU;
+use Autocache::Strategy::Store::Memory;
 
 ###l4p Log::Log4perl->easy_init( $DEBUG );
 
@@ -30,7 +31,9 @@ my $max_size = $record_size * 3;
 
 ###l4p get_logger()->debug( "max size : $max_size" );
 
-my $store = Autocache::Store::MemoryLRU->new( max_size => $max_size );
+my $store = Autocache::Strategy::Eviction::LRU->new(
+    max_size => $max_size,
+    base_strategy => Autocache::Strategy::Store::Memory->new, );
 
 my $key;
 

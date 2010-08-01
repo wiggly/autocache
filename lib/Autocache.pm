@@ -3,11 +3,12 @@ package Autocache;
 use strict;
 use warnings;
 
-our $VERSION = '0.002_001';
+our $VERSION = '0.003_001';
 $VERSION = eval $VERSION;
 
 use Autocache::Config;
-use Autocache::Store::Memory;
+use Autocache::Strategy::Store::Memory;
+#use Autocache::Store::Memory;
 use Autocache::Strategy::Simple;
 use Autocache::WorkQueue;
 use Carp;
@@ -266,7 +267,7 @@ sub get_default_store
 ###l4p     get_logger()->debug( "get_default_store" );
     unless( $self->{default_store} )
     {
-        $self->{default_store} = Autocache::Store::Memory->new;
+        $self->{default_store} = Autocache::Strategy::Store::Memory->new;
     }
     return $self->{default_store};
 }

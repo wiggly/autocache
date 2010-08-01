@@ -1,8 +1,8 @@
-package Autocache::Store::Memory;
+package Autocache::Strategy::Store::Memory;
 
 use Any::Moose;
 
-extends 'Autocache::Store';
+extends 'Autocache::Strategy';
 
 ###l4p use Log::Log4perl qw( get_logger );
 

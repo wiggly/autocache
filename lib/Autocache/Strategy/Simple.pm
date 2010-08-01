@@ -9,7 +9,7 @@ use Carp qw( cluck );
 
 has 'store' => (
     is => 'ro',
-    isa => 'Autocache::Store',
+    isa => 'Autocache::Strategy',
     lazy_build => 1,
 );
 
