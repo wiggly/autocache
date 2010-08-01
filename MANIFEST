@@ -40,6 +40,5 @@ t/004_stat.t.conf
 t/005_cost.t
 t/005_cost.t.conf
 t/006_lru.t
-t/007_null.t
 t/log.conf
 TODO
