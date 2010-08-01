@@ -1,7 +1,7 @@
 
 Autocache revision history
 
-0.003 - ????-??-??
+0.003 - 2010-07-31
 
 Removed distinction between strategies and stores. Stores are now a kind of
 strategy.
