@@ -7,12 +7,11 @@ our $VERSION = '0.003';
 $VERSION = eval $VERSION;
 
 use Autocache::Config;
-use Autocache::Strategy::Store::Memory;
-#use Autocache::Store::Memory;
 use Autocache::Request;
-#use Autocache::Strategy::Simple;
+use Autocache::Strategy::Store::Memory;
 use Autocache::WorkQueue;
 use Carp;
+
 ###l4p use Log::Log4perl qw( get_logger );
 
 require Exporter;
@@ -64,25 +63,6 @@ sub configure
 {
     my ($self) = @_;
 
-#    foreach my $node ( $self->{config}->get_node( 'store' )->children )
-#    {
-#        my $name = $node->name;
-#        my $package = $node->value;
-#        _use_package( $package );
-#
-#        my $store;
-#
- #       eval
- ##       {
- #           $store = $package->new( $node );
- #       };
- #       if( $@ )
- #       {
- #           confess "cannot create store $name using package $package - $@";
- #       }
- #       $self->{store}{$node->name} = $store;
- #   }
-
     foreach my $node ( $self->{config}->get_node( 'strategy' )->children )
     {
         my $name = $node->name;
@@ -103,12 +83,6 @@ sub configure
     }
 
     $self->configure_functions( $self->{config}->get_node( 'fn' ) );
-
-#    if( $self->{config}->get_node( 'default_store' ) )
-#    {
-#        $self->{default_store} = $self->get_store(
-#            $self->{config}->get_node( 'default_store' )->value );
-#    }
 
     if( $self->{config}->node_exists( 'default_strategy' ) )
     {
@@ -240,15 +214,6 @@ sub get_strategy
     return $self->{strategy}{$name};
 }
 
-#sub get_store
-#{
-#    my ($self,$name) = @_;
-####l4p     get_logger()->debug( "get_store '$name'" );
-#    confess "cannot find store $name"
-#        unless $self->{store}{$name};
- #   return $self->{store}{$name};
-#}#
-
 sub get_default_strategy
 {
     my ($self) = @_;
@@ -259,17 +224,6 @@ sub get_default_strategy
     }
     return $self->{default_strategy};
 }
-
-#sub get_default_store
-#{
-#    my ($self) = @_;
-####l4p     get_logger()->debug( "get_default_store" );
-#    unless( $self->{default_store} )
-#    {
-#        $self->{default_store} = Autocache::Strategy::Store::Memory->new;
-#    }
-#    return $self->{default_store};
-#}
 
 sub get_default_normaliser
 {
