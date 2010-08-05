@@ -14,35 +14,31 @@ name: Autocache
 provides:
   Autocache:
     file: lib/Autocache.pm
-    version: 0.002
+    version: 0.003_001
   Autocache::Config:
     file: lib/Autocache/Config.pm
   Autocache::Config::Node:
     file: lib/Autocache/Config/Node.pm
   Autocache::Record:
     file: lib/Autocache/Record.pm
-  Autocache::Store:
-    file: lib/Autocache/Store.pm
-  Autocache::Store::Memcached:
-    file: lib/Autocache/Store/Memcached.pm
-  Autocache::Store::Memory:
-    file: lib/Autocache/Store/Memory.pm
-  Autocache::Store::MemoryLRU:
-    file: lib/Autocache/Store/MemoryLRU.pm
-  Autocache::Store::MemoryLRU::Entry:
-    file: lib/Autocache/Store/MemoryLRU/Entry.pm
-  Autocache::Store::Null:
-    file: lib/Autocache/Store/Null.pm
+  Autocache::Request:
+    file: lib/Autocache/Request.pm
   Autocache::Strategy:
     file: lib/Autocache/Strategy.pm
   Autocache::Strategy::CostBased:
     file: lib/Autocache/Strategy/CostBased.pm
+  Autocache::Strategy::Eviction::LRU:
+    file: lib/Autocache/Strategy/Eviction/LRU.pm
+  Autocache::Strategy::Eviction::LRU::Entry:
+    file: lib/Autocache/Strategy/Eviction/LRU/Entry.pm
   Autocache::Strategy::Refresh:
     file: lib/Autocache/Strategy/Refresh.pm
-  Autocache::Strategy::Simple:
-    file: lib/Autocache/Strategy/Simple.pm
   Autocache::Strategy::Statistics:
     file: lib/Autocache/Strategy/Statistics.pm
+  Autocache::Strategy::Store::Memcached:
+    file: lib/Autocache/Strategy/Store/Memcached.pm
+  Autocache::Strategy::Store::Memory:
+    file: lib/Autocache/Strategy/Store/Memory.pm
   Autocache::WorkQueue:
     file: lib/Autocache/WorkQueue.pm
 requires:
@@ -52,4 +48,4 @@ requires:
   perl: v5.8.8
 resources:
   license: http://dev.perl.org/licenses/
-version: 0.002
+version: 0.003_001
