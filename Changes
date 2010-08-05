@@ -1,6 +1,10 @@
 
 Autocache revision history
 
+0.004 - 2010-??-??
+
+Modified build script to only run lru test if feature has been turned on.
+
 0.003 - 2010-07-31
 
 Removed distinction between strategies and stores. Stores are now a kind of
