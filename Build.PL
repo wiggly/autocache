@@ -16,7 +16,9 @@ my $builder = Module::Build->new(
     auto_features => {
         log4perl => {
             description => 'Log4perl',
-            requires => { 'Log::Log4perl' => '1.12', },
+            requires => {
+                'Log::Log4perl' => '1.12',
+            },
 	},
 	memory_lru => {
 	    description => 'Memory LRU store',
@@ -25,6 +27,9 @@ my $builder = Module::Build->new(
 	        'Heap' => '0.80',
             },
 	},
+    },
+    PL_files => {
+        't/006_lru.t.PL' => 't/006_lru.t',
     },
 );
 
