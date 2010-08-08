@@ -3,8 +3,7 @@
 
 - add shared memory store
 
-- cleanup logging, remove dependence on log4perl and perhaps allow logger
-  injection
+- cleanup logging
 
 - remove all die/confess statements except where they are in the init phase
 
