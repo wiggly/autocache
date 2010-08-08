@@ -4,21 +4,19 @@ use strict;
 use warnings;
 
 use Test::More tests => 4;
-###l4p use Log::Log4perl;
-###l4p Log::Log4perl::init( 't/log.conf' );
 use Autocache qw(autocache);
 
 Autocache->initialise(filename => 't/005_cost.t.conf');
 
 my @numbers = (1, 2);
 sub cheap {
-	return shift @numbers;
+    return shift @numbers;
 }
 
 my @more_numbers = (1, 2);
 sub expensive {
-	sleep 2;
-	return shift @more_numbers;
+    sleep 2;
+    return shift @more_numbers;
 }
 
 autocache 'cheap';

@@ -6,13 +6,12 @@ use warnings;
 use lib '../lib';
 
 use Log::Log4perl qw( :easy );
-use Log::Log4perl::Resurrector;
 
 use Autocache qw( autocache );
 
 Log::Log4perl->easy_init( $DEBUG );
 
-Autocache->initialise( filename => './variable_cost.conf' );
+Autocache->initialise( filename => './variable_cost.conf', logger => get_logger() );
 
 autocache 'square';
 

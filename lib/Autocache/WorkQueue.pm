@@ -2,8 +2,7 @@ package Autocache::WorkQueue;
 
 use Any::Moose;
 
-###l4p use Log::Log4perl qw( get_logger );
-use Data::Dumper;
+use Autocache::Logger qw(get_logger);
 
 #
 # Null Memory Strategy - never expire, in memory cache
@@ -21,7 +20,7 @@ has '_queue' => (
 sub push
 {
     my ($self,$task) = @_;
-###l4p     get_logger()->debug( "push" );
+    get_logger()->debug( "push" );
     push @{$self->_queue}, $task;
     return 1;
 }
@@ -32,14 +31,14 @@ sub push
 sub pop
 {
     my ($self,$key,$rec) = @_;
-###l4p     get_logger()->debug( "pop" );
+    get_logger()->debug( "pop" );
     shift @{$self->_queue};
 }
 
 sub size
 {
     my ($self,$key,$rec) = @_;
-###l4p     get_logger()->debug( "size" );
+    get_logger()->debug( "size" );
     return scalar @{$self->_queue};
 }
 
@@ -50,7 +49,7 @@ sub size
 sub execute
 {
     my ($self) = @_;
-###l4p     get_logger()->debug( "execute" );
+    get_logger()->debug( "execute" );
     return 0 unless $self->size();
     my $count = 0;
     while( my $task = $self->pop )

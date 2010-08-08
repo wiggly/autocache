@@ -6,7 +6,7 @@ extends 'Autocache::Strategy';
 
 use Autocache;
 use Carp;
-###l4p use Log::Log4perl qw( get_logger );
+use Autocache::Logger qw(get_logger);
 use Scalar::Util qw( weaken );
 
 #
@@ -49,14 +49,14 @@ has 'work_queue' => (
 sub create
 {
     my ($self,$req) = @_;
-###l4p     get_logger()->debug( "create" );
+    get_logger()->debug( "create" );
     return $self->base_strategy->create( $req );
 }
 
 sub get
 {
     my ($self,$req) = @_;
-###l4p     get_logger()->debug( "get" );
+    get_logger()->debug( "get" );
     my $rec = $self->base_strategy->get( $req );
 
 
@@ -65,8 +65,8 @@ sub get
     #
     if( $rec and ( $rec->age > $self->refresh_age ) )
     {
-###l4p         get_logger()->debug( "record age  : " . $rec->age );
-###l4p         get_logger()->debug( "refresh age : " . $self->refresh_age );
+        get_logger()->debug( "record age  : " . $rec->age );
+        get_logger()->debug( "refresh age : " . $self->refresh_age );
 
         $self->work_queue->push( $self->_refresh_task( $req, $rec ) );
     }
@@ -80,7 +80,7 @@ sub get
 sub set
 {
     my ($self,$req,$rec) = @_;
-###l4p     get_logger()->debug( "set " . $rec->name );
+    get_logger()->debug( "set " . $req->name );
     return $self->base_strategy->set( $req, $rec );
 }
 
@@ -88,13 +88,13 @@ sub _refresh_task
 {
     my ($self,$req,$rec) = @_;
 
-###l4p     get_logger()->debug( "_refresh_task " . $name );
+    get_logger()->debug( "_refresh_task " . $rec->name );
 
     weaken $self;
 
     return sub
     {
-###l4p         get_logger()->debug( "refreshing record: " . $rec->to_string );
+        get_logger()->debug( "refreshing record: " . $rec->to_string );
         my $fresh_rec = $self->create( $req );
         $self->set( $fresh_rec );
     };
@@ -130,7 +130,7 @@ around BUILDARGS => sub
     my $orig = shift;
     my $class = shift;
 
-###l4p     get_logger()->debug( __PACKAGE__ . " - BUILDARGS" );
+    get_logger()->debug( __PACKAGE__ . " - BUILDARGS" );
 
     if( ref $_[0] )
     {
@@ -140,13 +140,13 @@ around BUILDARGS => sub
 
         if( $node = $config->get_node( 'base_strategy' ) )
         {
-###l4p             get_logger()->debug( "base strategy node found" );
+            get_logger()->debug( "base strategy node found" );
             $args{base_strategy} = Autocache->singleton->get_strategy( $node->value );
         }
 
         if( $node = $config->get_node( 'refresh_age' ) )
         {
-###l4p             get_logger()->debug( "refresh age node found" );
+            get_logger()->debug( "refresh age node found" );
             $args{refresh_age} = $node->value;
         }
 

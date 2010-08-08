@@ -9,7 +9,7 @@ use Carp qw( confess );
 use Devel::Size qw( total_size );
 use Heap::Binary;
 use Heap::Elem::Ref qw( RefElem );
-###l4p use Log::Log4perl qw( get_logger );
+use Autocache::Logger qw(get_logger);
 
 has 'size' => (
     is => 'rw',
@@ -52,7 +52,7 @@ has 'base_strategy' => (
 sub get
 {
     my ($self,$req) = @_;
-###l4p     get_logger()->debug( "get: $key" );
+    get_logger()->debug( 'get: '.$req->key );
 
     my $rec = $self->base_strategy->get( $req );
 
@@ -85,7 +85,7 @@ sub get
 sub set
 {
     my ($self,$req,$rec) = @_;
-###l4p     get_logger()->debug( "set: $key" );
+    get_logger()->debug( "set: $req->key" );
     my $elem = RefElem( Autocache::Strategy::Eviction::LRU::Entry->new(
         key => $req->key,
         size => total_size( $rec ) ) );
@@ -96,18 +96,18 @@ sub set
     # this key
     if( my $tmp = delete $self->_map->{$req->key} )
     {
-###l4p         get_logger()->debug( "removing existing value for key" );
+        get_logger()->debug( "removing existing value for key" );
         $self->_heap->delete( $tmp );
         $size -= $tmp->val->size;
     }
 
     while( $size > $self->max_size )
     {
-###l4p         get_logger()->debug( "cache size: $size" );
+        get_logger()->debug( "cache size: $size" );
 
         my $lru = $self->_heap->extract_top;
 
-###l4p         get_logger()->debug( "LRU key: " . $lru->val->key );
+        get_logger()->debug( "LRU key: " . $lru->val->key );
 
         $size -= $lru->val->size;
         delete $self->_map->{$lru->val->key};
@@ -126,7 +126,7 @@ sub set
 sub delete
 {
     my ($self,$key) = @_;
-###l4p     get_logger()->debug( "delete: $key" );
+    get_logger()->debug( "delete: $key" );
 
     my $elem = delete $self->_map->{$key};
 
@@ -144,7 +144,7 @@ sub delete
         my $rec = $self->base_strategy->delete( $key );
         confess "delete did not find element in LRU but did find it in the base strategy"
             unless $rec;
-        return $rec;        
+        return $rec;
     }
 }
 
@@ -154,7 +154,7 @@ sub delete
 sub clear
 {
     my ($self,$key) = @_;
-###l4p     get_logger()->debug( "clear" );
+    get_logger()->debug( "clear" );
     $self->base_strategy->clear;
     $self->_heap = Heap::Binary->new;
     $self->_map = {};
@@ -176,7 +176,7 @@ around BUILDARGS => sub
     my $orig = shift;
     my $class = shift;
 
-###l4p     get_logger()->debug( __PACKAGE__ . " - BUILDARGS" );
+    get_logger()->debug( __PACKAGE__ . " - BUILDARGS" );
 
     if( ref $_[0] )
     {
@@ -186,13 +186,13 @@ around BUILDARGS => sub
 
         if( $node = $config->get_node( 'max_size' ) )
         {
-###l4p             get_logger()->debug( "max_size node found" );
+            get_logger()->debug( "max_size node found" );
             $args{max_size} = $node->value;
         }
 
         if( $node = $config->get_node( 'base_strategy' ) )
         {
-###l4p             get_logger()->debug( "base strategy node found" );
+            get_logger()->debug( "base strategy node found" );
             $args{base_strategy} = Autocache->singleton->get_strategy( $node->value );
         }
 

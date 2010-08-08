@@ -7,7 +7,7 @@ extends 'Autocache::Strategy';
 use Autocache;
 use Time::HiRes qw( gettimeofday tv_interval );
 
-###l4p use Log::Log4perl qw( get_logger );
+use Autocache::Logger qw(get_logger);
 
 #
 # Cost-Based Strategy - only cache content that takes over a certain amount
@@ -40,7 +40,7 @@ has 'base_strategy' => (
 sub create
 {
     my ($self,$req) = @_;
-###l4p     get_logger()->debug( "create" );
+    get_logger()->debug( "create" );
 
     my $t0 = [gettimeofday];
 
@@ -50,8 +50,8 @@ sub create
 
     $rec->{time_cost} = $elapsed * 1_000;
 
-###l4p     get_logger()->debug( "record time_cost  : " . $rec->time_cost );
-###l4p     get_logger()->debug( "cost threshold : " . $self->cost_threshold );
+    get_logger()->debug( "record time_cost  : " . $rec->time_cost );
+    get_logger()->debug( "cost threshold : " . $self->cost_threshold );
 
     return $rec;
 }
@@ -62,7 +62,7 @@ sub create
 sub get
 {
     my ($self,$req) = @_;
-###l4p     get_logger()->debug( "get" );
+    get_logger()->debug( "get" );
 
     my $rec = $self->base_strategy->get( $req );
 
@@ -75,11 +75,11 @@ sub get
 sub set
 {
     my ($self,$req,$rec) = @_;
-###l4p     get_logger()->debug( "set " . $rec->name );
+    get_logger()->debug( "set " . $rec->name );
     # only put in cache if it has exceeded our cost threshold
     if( $rec->time_cost > $self->cost_threshold )
     {
-###l4p         get_logger()->debug( "cost threshold exceeded setting in cache" );
+        get_logger()->debug( "cost threshold exceeded setting in cache" );
         return $self->base_strategy->set( $req, $rec );
     }
 }
@@ -109,7 +109,7 @@ around BUILDARGS => sub
     my $orig = shift;
     my $class = shift;
 
-###l4p     get_logger()->debug( __PACKAGE__ . " - BUILDARGS" );
+    get_logger()->debug( __PACKAGE__ . " - BUILDARGS" );
 
     if( ref $_[0] )
     {
@@ -119,13 +119,13 @@ around BUILDARGS => sub
 
         if( $node = $config->get_node( 'base_strategy' ) )
         {
-###l4p             get_logger()->debug( "base strategy node found" );
+            get_logger()->debug( "base strategy node found" );
             $args{base_strategy} = Autocache->singleton->get_strategy( $node->value );
         }
 
         if( $node = $config->get_node( 'cost_threshold' ) )
         {
-###l4p             get_logger()->debug( "cost threshold node found" );
+            get_logger()->debug( "cost threshold node found" );
             my $millis = $node->value;
 
             unless( $millis =~ /^\d+$/ )
@@ -146,7 +146,7 @@ around BUILDARGS => sub
 
             $args{cost_threshold} = $millis;
 
-###l4p             get_logger()->debug( sprintf 'cost threshold : %dms', $millis );
+            get_logger()->debug( sprintf 'cost threshold : %dms', $millis );
         }
 
         return $class->$orig( %args );

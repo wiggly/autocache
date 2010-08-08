@@ -14,6 +14,7 @@ example/variable_cost.pl
 lib/Autocache/Config/Node.pm
 lib/Autocache/Config.pm
 lib/Autocache.pm
+lib/Autocache/Logger.pm
 lib/Autocache/Record.pm
 lib/Autocache/Request.pm
 lib/Autocache/Strategy/CostBased.pm

@@ -3,7 +3,7 @@ package Autocache::Strategy;
 use Any::Moose;
 
 use Autocache::Record;
-###l4p use Log::Log4perl qw( get_logger );
+use Autocache::Logger qw(get_logger);
 
 #
 # get REQ
@@ -37,7 +37,7 @@ sub clear { return undef; }
 sub create
 {
     my ($self,$req) = @_;
-###l4p     get_logger()->debug( "create" );
+    get_logger()->debug( "create" );
     my $value;
 
     if( $req->context eq 'S' )

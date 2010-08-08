@@ -3,7 +3,7 @@ package Autocache::Record;
 use strict;
 use warnings;
 
-###l4p use Log::Log4perl qw( get_logger );
+use Autocache::Logger qw(get_logger);
 
 our $AUTOLOAD;
 
@@ -48,7 +48,7 @@ sub AUTOLOAD
 {
     my ($self) = @_;
     return if $AUTOLOAD =~ /::DESTROY$/;
-###l4p     get_logger()->debug( "AUTOLOAD $AUTOLOAD" );
+    get_logger()->debug( "AUTOLOAD $AUTOLOAD" );
     if( $AUTOLOAD =~ m/^.*::(\w+?)$/ )
     {
         my $name = $1;
@@ -68,7 +68,7 @@ sub AUTOLOAD
         }
         goto &{$AUTOLOAD};
     }
-###l4p     get_logger()->error( "AUTOLOAD failed : $AUTOLOAD" );
+    get_logger()->error( "AUTOLOAD failed : $AUTOLOAD" );
 }
 
 1;

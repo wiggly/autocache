@@ -2,7 +2,7 @@ package Autocache::Request;
 
 use Any::Moose;
 
-###l4p use Log::Log4perl qw( get_logger );
+use Autocache::Logger qw(get_logger);
 
 has 'name' => (
     is => 'ro',
@@ -41,7 +41,7 @@ has 'key' => (
 sub _build_key
 {
     my ($self) = @_;
-###l4p     get_logger()->debug( "_build_key" );
+    get_logger()->debug( "_build_key" );
     return sprintf 'AC-%s-%s-%s',
         $self->context,
         $self->name,

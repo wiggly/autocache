@@ -4,8 +4,6 @@ use strict;
 use warnings;
 
 use Test::More tests => 5;
-###l4p use Log::Log4perl;
-###l4p Log::Log4perl::init( 't/log.conf' );
 use Autocache qw( autocache );
 
 Autocache->initialise( filename => 't/003_refresh.t.conf' );

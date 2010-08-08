@@ -6,13 +6,12 @@ use warnings;
 use lib '../lib';
 
 use Log::Log4perl qw( :easy );
-use Log::Log4perl::Resurrector;
 
 use Autocache qw( autocache );
 
 Log::Log4perl->easy_init( $DEBUG );
 
-Autocache->initialise( filename => './fib.conf' );
+Autocache->initialise( filename => './fib.conf', logger => get_logger() );
 
 autocache 'fib';
 
@@ -28,7 +27,7 @@ exit;
 
 sub fib
 {
-    my ($n) = @_;    
+    my ($n) = @_;
     return 1 if( $n == 1 || $n == 2 );
     return ( fib( $n - 1 ) + fib( $n - 2 ) );
 }

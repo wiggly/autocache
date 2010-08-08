@@ -5,15 +5,10 @@ use warnings;
 
 use Test::More tests => 10;
 
-###l4p use Log::Log4perl qw( :easy );
-###l4p use Log::Log4perl::Resurrector;
-
 use Autocache::Request;
 use Autocache::Record;
 use Autocache::Strategy::Eviction::LRU;
 use Autocache::Strategy::Store::Memory;
-
-###l4p Log::Log4perl->easy_init( $DEBUG );
 
 use Devel::Size qw( total_size );
 
@@ -35,11 +30,7 @@ foreach my $key ( 'a'..'e' )
 
 my $record_size = total_size( $records{a} );
 
-###l4p get_logger()->debug( "record size : $record_size" );
-
 my $max_size = $record_size * 3;
-
-###l4p get_logger()->debug( "max size : $max_size" );
 
 my $store = Autocache::Strategy::Eviction::LRU->new(
     max_size => $max_size,

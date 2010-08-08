@@ -3,7 +3,7 @@ package Autocache::Config::Node;
 use strict;
 use warnings;
 
-###l4p use Log::Log4perl qw( get_logger );
+use Autocache::Logger qw(get_logger);
 
 sub new
 {
@@ -63,7 +63,7 @@ sub remove_child
 sub get_node
 {
     my ($self,$path) = @_;
-###l4p     get_logger()->debug( "get_node: $path" );
+    get_logger()->debug( "get_node: $path" );
     my ($name,$rest) = split /\./, $path, 2;
 
     my $node = $self->{child}{$name};
@@ -81,7 +81,7 @@ sub get_node
 sub node_exists
 {
     my ($self,$path) = @_;
-###l4p     get_logger()->debug( "node_exists: $path" );
+    get_logger()->debug( "node_exists: $path" );
     my ($name,$rest) = split /\./, $path, 2;
 
     return undef unless exists $self->{child}{$name};

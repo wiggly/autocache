@@ -4,7 +4,7 @@ use Any::Moose;
 
 extends 'Autocache::Strategy';
 
-###l4p use Log::Log4perl qw( get_logger );
+use Autocache::Logger qw(get_logger);
 
 has '_cache' => (
     is => 'rw',
@@ -18,7 +18,7 @@ has '_cache' => (
 sub get
 {
     my ($self,$req) = @_;
-###l4p     get_logger()->debug( "get: " . $req->key );
+    get_logger()->debug( "get: " . $req->key );
     return unless exists $self->_cache->{$req->key};
     return $self->_cache->{$req->key};
 }
@@ -29,7 +29,7 @@ sub get
 sub set
 {
     my ($self,$req,$rec) = @_;
-###l4p    get_logger()->debug( "set: " . $req->key );
+   get_logger()->debug( "set: " . $req->key );
     $self->_cache->{$req->key} = $rec;
 }
 
@@ -39,7 +39,7 @@ sub set
 sub delete
 {
     my ($self,$key) = @_;
-###l4p     get_logger()->debug( "delete: $key" );
+    get_logger()->debug( "delete: $key" );
     delete $self->_cache->{$key};
 }
 
@@ -49,7 +49,7 @@ sub delete
 sub clear
 {
     my ($self,$key) = @_;
-###l4p     get_logger()->debug( "clear" );
+    get_logger()->debug( "clear" );
     $self->_cache = {};
 }
 

@@ -6,7 +6,6 @@ use warnings;
 use lib '../lib';
 
 use Log::Log4perl qw( :easy );
-use Log::Log4perl::Resurrector;
 
 use Autocache qw( autocache );
 
@@ -14,7 +13,7 @@ Log::Log4perl->easy_init( $DEBUG );
 
 use Devel::Size qw( total_size );
 
-Autocache->initialise( filename => './lru.conf' );
+Autocache->initialise( filename => './lru.conf', logger => get_logger() );
 
 autocache 'generate_data';
 
