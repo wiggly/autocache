@@ -327,14 +327,11 @@ In addition to this though Autocache allows you to specify in great detail
 how and where function results get cached.
 
 The module uses IoC/dependency injection from a configuration file to setup
-a number of Stores and Strategies. These are the basic building blocks used
-to determine how things get cached.
+a number Strategies. These are the basic building blocks used to determine
+how things get cached.
 
 Strategies determine how a cached value should be validated, refreshed, and
 even whether or not the value should be stored at all.
-
-Stores provide the actual storage for values and also specify how values get
-evicted from stores, if at all.
 
 The goal here is to make it stupidly simple to start to cache certain
 functions, and change where and how those values get cached if you find
@@ -496,20 +493,18 @@ the same value is returned in either scalr or list context.
 
 =head1 ARCHITECTURE
 
-Autocache splits up the process of caching into generating the values and
-storing the values.
+Autocache initially split up the process of caching into generating the values and
+storing the values.  This has since been unified under the banner of 'strategies'.
+There is a 'Store' namespace in 'Strategy', intended to represent strategies
+that involve storage.
 
-Values are generated using Strategies, which may be chained. Some examples
-of Strategies are Simple, Refresh and CostBased.
+Strategies may be chained.  Some examples of Strategies are CostBased, Refresh,
+Store::Memory and Store::Memcached.
 
-Values are stored using Stores. Some examples of Stores are UnboundedMemory,
-BoundedMemoryLRU and Memcached.
-
-The API for both Strategies and Stores is not yet completely fixed but you
-should be able to quite easily take one of those that already exists and
-modify it to suit your needs. The configuration syntax allows you to use any
-custom classes you like as long as they can accept the way we perform IoC
-(sub-optimal right now).
+The API for Strategies is not yet completely fixed but you should be able to quite
+easily take one of those that already exists and modify it to suit your needs. The
+configuration syntax allows you to use any custom classes you like as long as they
+can accept the way we perform IoC (sub-optimal right now).
 
 =head1 TODO
 
