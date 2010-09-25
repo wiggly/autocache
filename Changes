@@ -5,6 +5,12 @@ Autocache revision history
 
 Modified build script to only run lru test if feature has been turned on.
 
+Added FIFO eviction strategy.
+
+Removed stats config options, we can use strategies for this.
+
+Added Autocache::Logger.
+
 0.003 - 2010-07-31
 
 Removed distinction between strategies and stores. Stores are now a kind of

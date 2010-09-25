@@ -85,7 +85,7 @@ sub set
 
         get_logger()->debug( "FIFO key: " . $victim_key );
 
-        $size -= $victim_size
+        $size -= $victim_size;
         $self->base_strategy->delete( $victim_key );
     }
 
@@ -106,9 +106,9 @@ sub delete
 
     my $size = $self->size;
 
-    my ( $key, $rec_size ) = $self->_remove_entry( $req->key );
+    my ( $removed_key, $rec_size ) = $self->_remove_entry( $key );
 
-    if( $key )
+    if( $removed_key )
     {
         $size -= $rec_size;
         $self->size( $size );

@@ -59,6 +59,10 @@ isnt( $store->get( $requests{a} ), undef, 'record not evicted' );
 isnt( $store->get( $requests{b} ), undef, 'record not evicted' );
 isnt( $store->get( $requests{c} ), undef, 'record not evicted' );
 
+$key = 'a';
+
+$store->get( $requests{$key} );
+
 $key = 'd';
 
 $store->set( $requests{$key}, $records{$key} );

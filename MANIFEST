@@ -18,6 +18,7 @@ lib/Autocache/Logger.pm
 lib/Autocache/Record.pm
 lib/Autocache/Request.pm
 lib/Autocache/Strategy/CostBased.pm
+lib/Autocache/Strategy/Eviction/FIFO.pm
 lib/Autocache/Strategy/Eviction/LRU/Entry.pm
 lib/Autocache/Strategy/Eviction/LRU.pm
 lib/Autocache/Strategy.pm
@@ -42,5 +43,6 @@ t/005_cost.t
 t/005_cost.t.conf
 t/006_lru.t.PL
 t/006_lru.t.X
-t/log.conf
+t/007_fifo.t.PL
+t/007_fifo.t.X
 TODO

@@ -21,15 +21,22 @@ my $builder = Module::Build->new(
             },
 	},
 	memory_lru => {
-	    description => 'Memory LRU store',
+	    description => 'LRU eviction strategy',
 	    requires => {
 	        'Devel::Size' => '0.69',
 	        'Heap' => '0.80',
             },
 	},
+	eviction_fifo => {
+	    description => 'FIFO eviction strategy',
+	    requires => {
+	        'Devel::Size' => '0.69',
+            },
+	},
     },
     PL_files => {
         't/006_lru.t.PL' => 't/006_lru.t',
+        't/007_fifo.t.PL' => 't/007_fifo.t',
     },
 );
 
