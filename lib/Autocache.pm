@@ -16,7 +16,7 @@ use Carp;
 require Exporter;
 
 our @ISA = qw( Exporter );
-our @EXPORT_OK = qw( autocache );
+our @EXPORT = qw( autocache );
 
 my $SINGLETON;
 
