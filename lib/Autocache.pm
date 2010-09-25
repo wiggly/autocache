@@ -91,22 +91,6 @@ sub configure
         $self->{default_strategy} = $self->get_strategy(
             $self->{config}->get_node( 'default_strategy' )->value );
     }
-
-    my $stats = $self->{config}->get_node( 'stats' );
-    if( $stats->node_exists( 'enable' ) )
-    {
-        $self->{enable_stats} = $stats->get_node( 'enable' )->value;
-    }
-
-    if( exists $ENV{AUTOCACHE_STATS} )
-    {
-        $self->{enable_stats} = $ENV{AUTOCACHE_STATS};
-    }
-
-    if( $stats->node_exists( 'dump_on_exit' ) )
-    {
-        $self->{dump_stats} = $stats->get_node( 'dump_on_exit' )->value;
-    }
 }
 
 sub configure_functions
