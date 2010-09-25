@@ -29,7 +29,7 @@ sub get
 sub set
 {
     my ($self,$req,$rec) = @_;
-   get_logger()->debug( "set: " . $req->key );
+    get_logger()->debug( "set: " . $req->key );
     $self->_cache->{$req->key} = $rec;
 }
 
