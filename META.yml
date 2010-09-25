@@ -14,11 +14,15 @@ name: Autocache
 provides:
   Autocache:
     file: lib/Autocache.pm
-    version: 0.003_002
+    version: 0.003_003
   Autocache::Config:
     file: lib/Autocache/Config.pm
   Autocache::Config::Node:
     file: lib/Autocache/Config/Node.pm
+  Autocache::Logger:
+    file: lib/Autocache/Logger.pm
+  Autocache::Logger::Null:
+    file: lib/Autocache/Logger.pm
   Autocache::Record:
     file: lib/Autocache/Record.pm
   Autocache::Request:
@@ -27,6 +31,8 @@ provides:
     file: lib/Autocache/Strategy.pm
   Autocache::Strategy::CostBased:
     file: lib/Autocache/Strategy/CostBased.pm
+  Autocache::Strategy::Eviction::FIFO:
+    file: lib/Autocache/Strategy/Eviction/FIFO.pm
   Autocache::Strategy::Eviction::LRU:
     file: lib/Autocache/Strategy/Eviction/LRU.pm
   Autocache::Strategy::Eviction::LRU::Entry:
@@ -48,4 +54,4 @@ requires:
   perl: v5.8.8
 resources:
   license: http://dev.perl.org/licenses/
-version: 0.003_002
+version: 0.003_003
