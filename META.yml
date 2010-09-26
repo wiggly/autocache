@@ -14,7 +14,7 @@ name: Autocache
 provides:
   Autocache:
     file: lib/Autocache.pm
-    version: 0.003_003
+    version: 0.004
   Autocache::Config:
     file: lib/Autocache/Config.pm
   Autocache::Config::Node:
@@ -54,4 +54,4 @@ requires:
   perl: v5.8.8
 resources:
   license: http://dev.perl.org/licenses/
-version: 0.003_003
+version: 0.004

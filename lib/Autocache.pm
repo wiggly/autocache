@@ -3,7 +3,7 @@ package Autocache;
 use strict;
 use warnings;
 
-our $VERSION = '0.003_003';
+our $VERSION = '0.004';
 $VERSION = eval $VERSION;
 
 use Autocache::Config;
