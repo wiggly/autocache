@@ -32,7 +32,7 @@ has 'statistics' => (
 sub create
 {
     my ($self,$req) = @_;
-    get_logger()->debug( "create" );
+###l4p    get_logger()->debug( "create" );
     ++$self->statistics->{create};
     return $self->base_strategy->create( $req );
 }
@@ -43,7 +43,7 @@ sub create
 sub get
 {
     my ($self,$req) = @_;
-    get_logger()->debug( "get" );
+###l4p    get_logger()->debug( "get" );
     my $rec = $self->base_strategy->get(
         $req );
     if( $rec )
@@ -64,7 +64,7 @@ sub get
 sub set
 {
     my ($self,$req,$rec) = @_;
-    get_logger()->debug( "set " . $rec->name );
+###l4p    get_logger()->debug( "set " . $rec->name );
     return $self->base_strategy->set( $req, $rec );
 }
 
@@ -103,7 +103,7 @@ around BUILDARGS => sub
     my $orig = shift;
     my $class = shift;
 
-    get_logger()->debug( __PACKAGE__ . " - BUILDARGS" );
+###l4p    get_logger()->debug( __PACKAGE__ . " - BUILDARGS" );
 
     if( ref $_[0] )
     {
@@ -113,7 +113,7 @@ around BUILDARGS => sub
 
         if( $node = $config->get_node( 'base_strategy' ) )
         {
-            get_logger()->debug( "base strategy node found" );
+###l4p            get_logger()->debug( "base strategy node found" );
             $args{base_strategy} = Autocache->singleton->get_strategy( $node->value );
         }
 

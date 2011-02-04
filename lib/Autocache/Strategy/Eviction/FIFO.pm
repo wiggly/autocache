@@ -52,7 +52,7 @@ has 'base_strategy' => (
 sub get
 {
     my ($self,$req) = @_;
-    get_logger()->debug( 'get: ' . $req->key );
+###l4p    get_logger()->debug( 'get: ' . $req->key );
     return $self->base_strategy->get( $req )
 }
 
@@ -62,7 +62,7 @@ sub get
 sub set
 {
     my ($self,$req,$rec) = @_;
-    get_logger()->debug( 'set: ' . $req->key );
+###l4p    get_logger()->debug( 'set: ' . $req->key );
 
     my $size = $self->size;
 
@@ -79,11 +79,11 @@ sub set
 
     while( $size > $self->max_size )
     {
-        get_logger()->debug( "cache size: $size" );
+###l4p        get_logger()->debug( "cache size: $size" );
 
         my ( $victim_key, $victim_size ) = $self->_remove_entry;
 
-        get_logger()->debug( "FIFO key: " . $victim_key );
+###l4p        get_logger()->debug( "FIFO key: " . $victim_key );
 
         $size -= $victim_size;
         $self->base_strategy->delete( $victim_key );
@@ -102,7 +102,7 @@ sub set
 sub delete
 {
     my ($self,$key) = @_;
-    get_logger()->debug( "delete: $key" );
+###l4p    get_logger()->debug( "delete: $key" );
 
     my $size = $self->size;
 
@@ -125,7 +125,7 @@ sub delete
 sub clear
 {
     my ($self,$key) = @_;
-    get_logger()->debug( "clear" );
+###l4p    get_logger()->debug( "clear" );
     $self->base_strategy->clear;
     $self->_queue = [];
     $self->_map = {};
@@ -141,7 +141,7 @@ sub clear
 sub _remove_entry
 {
     my ($self,$key) = @_;
-    get_logger()->debug( "_remove_entry" );
+###l4p    get_logger()->debug( "_remove_entry" );
 
     if( scalar @{$self->_queue} )
     {
@@ -172,7 +172,7 @@ around BUILDARGS => sub
     my $orig = shift;
     my $class = shift;
 
-    get_logger()->debug( __PACKAGE__ . " - BUILDARGS" );
+###l4p    get_logger()->debug( __PACKAGE__ . " - BUILDARGS" );
 
     if( ref $_[0] )
     {
@@ -182,13 +182,13 @@ around BUILDARGS => sub
 
         if( $node = $config->get_node( 'max_size' ) )
         {
-            get_logger()->debug( "max_size node found" );
+###l4p            get_logger()->debug( "max_size node found" );
             $args{max_size} = $node->value;
         }
 
         if( $node = $config->get_node( 'base_strategy' ) )
         {
-            get_logger()->debug( "base strategy node found" );
+###l4p            get_logger()->debug( "base strategy node found" );
             $args{base_strategy} = Autocache->singleton->get_strategy( $node->value );
         }
 

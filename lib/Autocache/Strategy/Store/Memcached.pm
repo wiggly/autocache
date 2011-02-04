@@ -21,7 +21,7 @@ has '_memcached' => (
 sub get
 {
     my ($self,$req) = @_;
-    get_logger()->debug( "get: " . $req->key );
+###l4p    get_logger()->debug( "get: " . $req->key );
     return $self->_memcached->get( $req->key );
 }
 
@@ -31,7 +31,7 @@ sub get
 sub set
 {
     my ($self,$req,$rec) = @_;
-    get_logger()->debug( "set: " . $req->key );
+###l4p    get_logger()->debug( "set: " . $req->key );
     $self->_memcached->set( $req->key, $rec, 0 );
 }
 
@@ -41,7 +41,7 @@ sub set
 sub delete
 {
     my ($self,$key) = @_;
-    get_logger()->debug( "delete" );
+###l4p    get_logger()->debug( "delete" );
     $self->_memcached->delete( $key );
 }
 

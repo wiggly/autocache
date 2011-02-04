@@ -1,7 +1,11 @@
 
 Autocache revision history
 
-0.004 - 2010-??-??
+0.005 - 2011-??-??
+
+Put logging statements behind log4perl resurrector functionality
+
+0.004 - 2010-09-26
 
 Modified build script to only run lru test if feature has been turned on.
 

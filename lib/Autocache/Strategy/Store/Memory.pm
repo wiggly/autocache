@@ -18,7 +18,7 @@ has '_cache' => (
 sub get
 {
     my ($self,$req) = @_;
-    get_logger()->debug( "get: " . $req->key );
+###l4p    get_logger()->debug( "get: " . $req->key );
     return unless exists $self->_cache->{$req->key};
     return $self->_cache->{$req->key};
 }
@@ -29,7 +29,7 @@ sub get
 sub set
 {
     my ($self,$req,$rec) = @_;
-    get_logger()->debug( "set: " . $req->key );
+###l4p    get_logger()->debug( "set: " . $req->key );
     $self->_cache->{$req->key} = $rec;
 }
 
@@ -39,7 +39,7 @@ sub set
 sub delete
 {
     my ($self,$key) = @_;
-    get_logger()->debug( "delete: $key" );
+###l4p    get_logger()->debug( "delete: $key" );
     delete $self->_cache->{$key};
 }
 
@@ -49,7 +49,7 @@ sub delete
 sub clear
 {
     my ($self,$key) = @_;
-    get_logger()->debug( "clear" );
+###l4p    get_logger()->debug( "clear" );
     $self->_cache = {};
 }
 

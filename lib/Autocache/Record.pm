@@ -48,7 +48,7 @@ sub AUTOLOAD
 {
     my ($self) = @_;
     return if $AUTOLOAD =~ /::DESTROY$/;
-    get_logger()->debug( "AUTOLOAD $AUTOLOAD" );
+###l4p    get_logger()->debug( "AUTOLOAD $AUTOLOAD" );
     if( $AUTOLOAD =~ m/^.*::(\w+?)$/ )
     {
         my $name = $1;
@@ -68,7 +68,7 @@ sub AUTOLOAD
         }
         goto &{$AUTOLOAD};
     }
-    get_logger()->error( "AUTOLOAD failed : $AUTOLOAD" );
+###l4p    get_logger()->error( "AUTOLOAD failed : $AUTOLOAD" );
 }
 
 1;

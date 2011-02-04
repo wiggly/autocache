@@ -37,7 +37,7 @@ sub clear { return undef; }
 sub create
 {
     my ($self,$req) = @_;
-    get_logger()->debug( "create" );
+###l4p    get_logger()->debug( "create" );
     my $value;
 
     if( $req->context eq 'S' )

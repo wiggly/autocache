@@ -41,7 +41,7 @@ has 'key' => (
 sub _build_key
 {
     my ($self) = @_;
-    get_logger()->debug( "_build_key" );
+###l4p    get_logger()->debug( "_build_key" );
     return sprintf 'AC-%s-%s-%s',
         $self->context,
         $self->name,
